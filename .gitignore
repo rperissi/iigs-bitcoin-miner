@@ -35,6 +35,7 @@
 !/inject_gsminer.sh
 !/wrap_2mg.py
 !/mock_pool.py
+!/dump_minerlog.sh
 
 # =============================================================================
 # prune artifacts inside the re-included directories

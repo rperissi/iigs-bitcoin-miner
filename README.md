@@ -16,6 +16,42 @@ Inspired by Charles Mangin’s Apple IIe [**8BITCOIN**](https://retroconnector.c
 
 ---
 
+## Features
+
+GS Miner is a **complete, full-stack application**, not a tech demo. It boots, configures, networks, mines, visualizes, and logs — and the same binary runs on **any** Apple IIGS or emulator, network or not.
+
+**Runs anywhere**
+- **DEMO mode (default)** — boots straight into the full dashboard and a real local SHA-256d loop on **any GS or emulator, no network required**. Watch the spectrum, scope, and graphs immediately.
+- **Portable install** — the app resolves its data (`SYSFILES/`) relative to wherever it is launched (GS/OS prefix `1/`, with volume fallbacks), so the **binary + `SYSFILES/` + `Icons/` run from any folder on any volume**, not just the shipped `GSMINER` disk.
+- **Custom Finder icon set** — a color (`$CA`) coin icon for the app and its files on the GS/OS desktop.
+
+**Networking & mining (LIVE)**
+- **Live Stratum v1** over Marinetti TCP — `subscribe` / `authorize` / `notify` / `submit` on one socket; loads and starts Marinetti itself if it isn't already up.
+- **Pool by IP *or* hostname** with **full DNS name resolution** (`TCPIPDNRNameToIP`).
+- **Primary + backup pool failover** with retry/backoff and prefer-primary re-probe.
+- **SHA-256d** with the **midstate** optimization (~2 compressions per nonce) via Stephen Heumann’s hand-tuned **65816-crypto** assembly.
+- **Real work, pool-target submit filtering** — honest hashing; only plausible shares would be submitted (hygiene, not fake mining — see [Is this really mining?](#is-this-really-mining)).
+
+**Operator controls**
+- **CONFIG page** — editable WORKER / WALLET / POOL+PORT / BACKUP+PORT and a **DEMO/LIVE toggle**, with SAVE / DEFAULTS / CANCEL / QUIT; persists to `MINER.CONF`.
+- **Start / Stop** mining on demand, fully **mouse-driven** (self-drawn cursor; clickable RUN / STOP / CONFIG).
+- **Intelligent status badge** on the main page — *connecting, resolving, retry, no IP, no Marinetti, pool fail, DNS fail, hashing,* etc. — so you always know exactly what the stack is doing.
+- **Expanded status** on the CONFIG page — full-sentence explanations of each state plus hints.
+
+**Live visualization (SHR dashboard)**
+- **Hash spectrum analyzer** — a rainbow oscilloscope driven by **real SHA-256d digest bytes** (each bar is an output byte of the live hash), so it’s an honest view of the work, not eye-candy.
+- **Live hashrate graph** — a rolling ~30-second VU/line chart of measured H/s.
+- **Active live readouts** — HASHRATE, SHARES (acc/rej), JOBS, UPTIME, NONCE, HASHES, plus **live NET DIFF** (decoded from `nBits`) and **BLOCK height** (BIP34, from the coinbase).
+- **Dynamic odds + BLOCK ETA** — block-finding odds and time-to-block computed live from network difficulty ÷ measured hashrate (yes, the quadrillion-years number is real math).
+- **Dynamic TCP link lamp** — grey / red / green link state that **pulses on live TX/RX traffic**.
+
+**Diagnostics**
+- **On-disk diagnostic logging** — event-driven, timestamped, rotating logs you can pull off the disk and parse on the host (see [Diagnostic logs](#diagnostic-logs)).
+
+> *Planned:* an Ensoniq DOC soundtrack with a mute toggle. Sound/music is still TBD and can be added later without touching the mining stack.
+
+---
+
 ## Download
 
 | Asset | Description |
@@ -157,32 +193,44 @@ See the header comment in `mock_pool.py` for the 80-byte block header layout the
 
 ## Diagnostic logs
 
-The app writes event-driven lines to rotating logs (never inside the hash loop):
+GS Miner keeps an **on-disk diagnostic trail** so connection quirks can be diagnosed after the fact — invaluable on real hardware, where there’s no console to watch.
 
-- `/GSMINER/SYSFILES/MINER.LOG` — current session  
-- `/GSMINER/SYSFILES/MINER.OLD` — previous ~8 KB block  
+**How it works**
 
-Examples: `CONNECT`, `JOB`, `STAT`, `ACCEPT`, `FAILOVER`, `DNS!`, `MINING`.
+- Two **8 KB-capped, rotating** plain-text (ProDOS `TXT`) files live in `SYSFILES/` next to the app:
+  - `/GSMINER/SYSFILES/MINER.LOG` — current session
+  - `/GSMINER/SYSFILES/MINER.OLD` — previous block (rotated when `MINER.LOG` fills)
+  - Together that’s ~16 KB / a few hundred lines of look-back — deliberately small to be floppy-friendly.
+- Lines are **event-driven and are never written inside the hash loop** (zero impact on hashrate). Each is timestamped `T+ssss.hh` — seconds since launch from `GetTick`.
+- A `STAT` **heartbeat** is written every ~15 s with `hr` (hashrate), `best`, `acc`/`rej` shares, `pool`, and `up` (uptime). Other events cover startup/config, the connection handshake, jobs, share results, and failures:
 
-On the host (eject the floppy in the emulator first):
+  | Group | Events |
+  |-------|--------|
+  | Startup / config | app version + MODE, pool / backup / worker |
+  | Connection | `CONNECT`, `DNS?` / `DNS=`, `TCP-UP`, `HS`, `SUBOK`, `DIFF`, `NET` (IP + link), `LINK` |
+  | Mining | `JOB`, `MINING`, `STAT` (heartbeat) |
+  | Shares | `SUBMIT`, `ACCEPT`, `REJECT` |
+  | Trouble | `FAIL`, `FAILOVER`, `TERM` |
+
+**Pulling the logs for analysis**
+
+From a **disk image** on the host (quit Ample / eject the disk first so the image isn’t locked):
 
 ```bash
-./dump_minerlog.sh        # print logs to terminal
-./dump_minerlog.sh -s     # also save under ./logs/
+./dump_minerlog.sh                      # print MINER.LOG then MINER.OLD (CR→LF cleaned)
+./dump_minerlog.sh -s                   # also save copies under ./logs/ with a timestamp
+./dump_minerlog.sh gsminer_v0.95.2mg    # point at a specific image (e.g. one pulled off CFFA)
 ```
 
-Requires `AppleCommander.jar` in the repo root (bring your own if not redistributed).
+Under the hood it’s just AppleCommander; the manual equivalent for a single file is:
 
----
+```bash
+java -jar AppleCommander.jar -g <image>.2mg SYSFILES/MINER.LOG | tr '\r' '\n'
+```
 
-## Features
+From the **real volume** (CFFA / SD / floppy): the logs are ordinary ProDOS `TXT` files at `/GSMINER/SYSFILES/MINER.LOG` (and `.OLD`). Copy them off with any ProDOS/GS-OS file tool (the Finder, Copy II Plus, `cp` under GNO, etc.) or read them on the GS directly — no special tooling required.
 
-- **Live Stratum** — subscribe, authorize, notify, submit over one TCP socket  
-- **Primary + backup pool failover**  
-- **SHA-256d** with **midstate** (~2 compressions per nonce) via Stephen Heumann’s **65816-crypto**  
-- **SHR dashboard** — hashrate graph, hash scope, live NET DIFF / BLOCK / JOBS / BLOCK ETA  
-- **CONFIG** persistence, mining **log**, TCP status lamp  
-- **DEMO mode** — full UI without TCP  
+> `dump_minerlog.sh` requires `AppleCommander.jar` in the repo root (bring your own if it isn’t redistributed) and a Java runtime.
 
 ---
 
