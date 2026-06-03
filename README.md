@@ -4,7 +4,9 @@ Got a few quadrillion years to kill? **GS Miner** is a GS/OS application for the
 
 Inspired by Charles Mangin’s Apple IIe [**8BITCOIN**](https://retroconnector.com/2019/08/13/mining-bitcoin-on-an-apple-ii-a-highly-impractical-guide/) (2019), built for the GS as a full app for the machine’s 40th anniversary year. **Not a retirement plan.**
 
-![GS Miner dashboard](branding/gsminer_v094_dashboard_final.png)
+![GS Miner live dashboard — mining on solo.ckpool.org](branding/gsminer_v095_dashboard.png)
+
+![GS Miner CONFIG page — pool, wallet, and DEMO/LIVE toggle](branding/gsminer_v095_config.png)
 
 > **Beta — `GSMINE94` (V0.94), 2026-06-02.** Shippable disk, long soaks stable (~9–10 H/s stock 2.8 MHz). **Source code** posted in a few days after final doc/baseline cleanup — the release disk runs now.
 >

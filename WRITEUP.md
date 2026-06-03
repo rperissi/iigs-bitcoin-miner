@@ -13,7 +13,9 @@ revisions, and the war stories.*
 > [`IIGS_BITCOIN_MINER_POC.md`](IIGS_BITCOIN_MINER_POC.md); the reusable UI method is in
 > [`IIgs_SHR_UI_PLAYBOOK.md`](IIgs_SHR_UI_PLAYBOOK.md).
 
-![GS Miner dashboard](branding/gsminer_v094_dashboard_final.png)
+![GS Miner live dashboard — mining on solo.ckpool.org](branding/gsminer_v095_dashboard.png)
+
+![GS Miner CONFIG page — pool, wallet, and DEMO/LIVE toggle](branding/gsminer_v095_config.png)
 
 ---
 
