@@ -84,10 +84,6 @@ viz/*.jpg
 viz/*.shr
 viz/*.icons
 viz/icons/
-# dropped FTA visual-overhaul scratch (see chat: parked, app ships as-is)
-viz/mockup_fta.py
-viz/mockup_fta_v2.py
-viz/render_panel_pushed.py
 # experiment / proof scripts + spare fonts (not part of the asset pipeline)
 viz/render_lc.py
 viz/render_lc2.py
@@ -110,8 +106,7 @@ viz/font5x8.py
 65816-crypto/sha256test
 65816-crypto/sha256test_b
 
-# branding/ : drop internal scratch / external reference edits / dropped mockups
-branding/fta_mockup_*
+# branding/ : drop internal scratch / external reference edits
 branding/reference_*
 branding/ref_*
 branding/*_compare*

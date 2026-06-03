@@ -2,7 +2,7 @@
 """
 build_frame.py - PROCEDURAL GS Miner chassis, native 320x200, "one sheet" look.
 
-Design notes (matching the concept mockup + FTA finish):
+Design notes (matching the concept mockup + chiseled-metal finish):
   * ONE metal sheet: recessed wells/screens cut into it, screws ONLY in the four
     outer corners (no per-panel rivets) -> single-panel feel.
   * Side readouts are a CONTIGUOUS stack of cells (no vertical gaps), which frees
@@ -72,7 +72,7 @@ def bevel2(x, y, w, h, lt, mid_lt, dk, mid_dk):
 
 
 def rtile(x, y, w, h):
-    """raised metal cell with strong relief (FTA chiaroscuro)."""
+    """raised metal cell with strong relief (high-contrast chiaroscuro)."""
     vgrad(x, y, w, h, g(1.34), g(0.66)); sheen(x, y, w, h, 34.0)
     bevel2(x, y, w, h, g(1.85), g(1.42), g(0.40), g(0.62))
     chamf(x, y, w, h, g(0.40))
@@ -94,7 +94,7 @@ def groove(x, y, w, h):
 
 
 def plate(x, y, w, h):
-    """bright near-white nameplate for crisp BLACK labels (FTA X-AXIS look)."""
+    """bright near-white nameplate for crisp BLACK labels (bright X-AXIS look)."""
     vgrad(x, y, w, h, g(1.82), g(1.55))
     bevel(x, y, w, h, g(1.98), g(1.30))
     chamf(x, y, w, h, g(1.30))
@@ -142,7 +142,7 @@ def main():
     ys, cellh = 67, 21
     for i in range(4):
         cy = ys + i * cellh
-        # FTA cell: black LED screen (green digits) on top + BRIGHT nameplate below
+        # LED cell: black LED screen (green digits) on top + BRIGHT nameplate below
         # for a bold BLACK label -> high contrast, razor clear.
         rtile(6, cy, 74, cellh)
         recess(9, cy + 1, 68, 10, BLACK); plate(9, cy + 12, 68, 9)       # left

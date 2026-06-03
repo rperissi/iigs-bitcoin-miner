@@ -62,7 +62,7 @@ def coin(x, y, w, h):
 
 
 def button(x, y, w, h, fill, label, lcol, down=False):
-    """FTA chiseled cap on raised pad; down = pressed (inverted bevel + nudge)."""
+    """chiseled cap on raised pad; down = pressed (inverted bevel + nudge)."""
     o = 1 if down else 0
     hi, lo = (BLK, WHT) if down else (WHT, BLK)
     rect(x, y, w, h, fill)

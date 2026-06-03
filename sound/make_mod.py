@@ -2,7 +2,7 @@
 """
 make_mod.py - generate an original ProTracker .MOD for GS Miner.
 
-Why a generator (not a static file): the FTA/SoundSmith vibe we're after
+Why a generator (not a static file): the SoundSmith/tracker vibe we're after
 (Modulae / Nucleus) is all about a tight, looping, catchy hook over a driving
 beat WITH AN ARC - a slow build, then a payoff. Having the whole song as data
 lets us iterate fast: tweak a bassline, swap a hook, restructure the arrangement,

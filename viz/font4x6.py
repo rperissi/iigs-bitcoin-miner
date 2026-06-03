@@ -2,7 +2,7 @@
 """
 font4x6.py - compact 4x6 hard-edged pixel font (uppercase, digits, symbols).
 
-Smaller/tighter than font5x7 so text reads light on the detailed chassis (the FTA
+Smaller/tighter than font5x7 so text reads light on the detailed chassis (the crisp
 label feel). Same API as font5x7 (GW,GH,text_width,draw_text) so it's a drop-in.
 This is the SAME glyph data we will port to the GS C drawing code.
 """

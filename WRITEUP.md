@@ -5,7 +5,7 @@ revisions, and the war stories.*
 
 > **Status:** beta — **`GSMINE95` / V0.95** (2026-06-03). **🏆 First confirmed LIVE mining on
 > real Apple IIgs hardware** — a 14 MHz TWGS with an Uthernet II (slot 2) on `solo.ckpool.org`
-> (~21 H/s; ~9–10 H/s on a stock 2.8 MHz GS). Mining core + Marinetti networking + FTA-style SHR
+> (~21 H/s; ~9–10 H/s on a stock 2.8 MHz GS). Mining core + Marinetti networking + a custom SHR
 > dashboard proven end-to-end. The shippable disk is a 2IMG-wrapped, CFFA-mountable `GSMINER` volume.
 >
 > This document is the **narrative write-up** for the repo. The exhaustive lab notebook
@@ -26,7 +26,7 @@ revisions, and the war stories.*
 5. [Architecture](#5-architecture)
 6. [Deep dive: the SHA-256d core](#6-deep-dive-the-sha-256d-core)
 7. [Deep dive: networking (Marinetti + Stratum)](#7-deep-dive-networking-marinetti--stratum)
-8. [Deep dive: the FTA-style SHR dashboard](#8-deep-dive-the-fta-style-shr-dashboard)
+8. [Deep dive: the SHR dashboard](#8-deep-dive-the-shr-dashboard)
 9. [The toolchain](#9-the-toolchain)
 10. [The build, milestone by milestone](#10-the-build-milestone-by-milestone)
 11. [Revision history](#11-revision-history)
@@ -47,7 +47,7 @@ revisions, and the war stories.*
 - connects to a **real Bitcoin Stratum pool** over **Marinetti TCP/IP** (Uthernet II / emulated),
 - pulls live jobs (`mining.notify`), assembles real 80-byte block headers,
 - runs **SHA-256d** on the 65816 with a hand-tuned assembly core + midstate optimization,
-- and renders a live **Super Hi-Res dashboard** (FTA-demo aesthetic): hashrate, NET DIFF,
+- and renders a live **Super Hi-Res dashboard**: hashrate, NET DIFF,
   block height, JOBS, a scrolling hash oscilloscope, VU history, and a BLOCK ETA measured
   in **quadrillions of years**.
 
@@ -102,7 +102,7 @@ mining. Full prose: README "Is this really mining?"; mechanism: POC §16i.
 | OS | **GS/OS** (System 6.0.x) — Memory Manager, Tool Locator, Finder |
 | Net | **Marinetti** TCP/IP (GS/OS tool set **$36**) over **Uthernet II** (W5100) |
 | Crypto | Stephen Heumann's **`sheumann/65816-crypto`** SHA-256 (hand-tuned asm) |
-| Graphics | **Super Hi-Res** 320 mode, bare-metal writes to `$E12000` (FTA approach) |
+| Graphics | **Super Hi-Res** 320 mode, bare-metal writes to `$E12000` |
 | Pool | **Stratum v1** (`mining.subscribe/authorize/notify/submit/set_difficulty`) |
 | Host tools | **Golden Gate** (ORCA/C `occ`), **AppleCommander**, **Ample/MAME** |
 
@@ -188,10 +188,10 @@ LongWord) — easy to get backwards. See POC §7/§7a and the DHCP/DNS gotcha in
 
 ---
 
-## 8. Deep dive: the FTA-style SHR dashboard
+## 8. Deep dive: the SHR dashboard
 
 The UI is **bare-metal Super Hi-Res** (320 mode), written directly to `$E12000` (pixels),
-`$E19D00` (per-scanline SCBs), `$E19E00` (palettes) — the authentic FTA-demo approach, and it
+`$E19D00` (per-scanline SCBs), `$E19E00` (palettes) — the authentic bare-metal approach, and it
 sidesteps QuickDraw startup cost.
 
 - **The chassis is procedural.** `viz/build_frame.py` draws one "metal sheet" with recessed
@@ -248,7 +248,7 @@ We build **natively on a Mac** and produce a **real IIGS binary** that runs in A
 | **M5** | Midstate optimization | ✅ `GSMINE70` — ~2 compressions/nonce; ~5–6 → ~8 H/s |
 | **M6** | Real-pool hardening | ✅ `GSMINE71` — `wallet.worker`, `extranonce2`, merkle branch, submit filter |
 | **M6.5** | Real-pool LIVE + ship hardening | ✅ `GSMINE72`→`88` — **verified live on `solo.ckpool.org`** |
-| **M7** | Visualization / FTA dashboard | 🔄 shipping (Stage 1+2); method in the SHR playbook |
+| **M7** | Visualization / SHR dashboard | 🔄 shipping (Stage 1+2); method in the SHR playbook |
 | **M8a/b** | LIVE Stratum wired into dashboard | ✅ cooperative client; panel stays live during net I/O |
 | **M-rel** | Ship prep + in-app logo | 🔄 `GSMINE89`→`94` — README, comms, `SYSFILES/`, icon, **gold logo** |
 | **M-accel** | Acceleration story | ⬜ measure stock vs accelerated multiplier |
@@ -404,7 +404,6 @@ target), and watch the full submit → ACCEPT path. Pull logs off the disk with 
 - **Antoine Vignau / Brutal Deluxe** — canonical IIGS graphics/tooling references
   (PicViewer, Convert3200, TrueConvert, Merlin 32) leaned on throughout.
 - **ckpool / `solo.ckpool.org`** and **public-pool.io** — the solo pools used for live testing.
-- **FTA / Free Tools Association** — the demoscene aesthetic the dashboard is an homage to.
 
 ---
 
@@ -441,7 +440,7 @@ V0.95 core** — it ships as-is.
 
 ### Where the payoff actually is (demo-scene flexes)
 
-- **Ensoniq DOC soundtrack** — a looping FTA-style SoundSmith/multivoice track (thumping,
+- **Ensoniq DOC soundtrack** — a looping SoundSmith/multivoice track (thumping,
   futuristic, catchy-not-grating) plus a soft per-*N*-hash tick, behind a **global MUTE** that
   silences everything. Patterns: `reference/antoinevignau-source/ensoniq/`. *This is the headliner.*
 - **`sha256d-65816` mini-library** — package the proven double-SHA core as a clean, documented,

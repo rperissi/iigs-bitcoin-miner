@@ -42,7 +42,7 @@ VUG = (2, 15, 4)
 VUY = (15, 15, 2)
 VUR = (15, 3, 2)
 # 7-colour SETI@home-style thermal spectrum, cool (low) -> hot (high).
-# GREY IS THE PRIORITY: the mid band keeps the FULL 7-step FTA metal ramp, and the
+# GREY IS THE PRIORITY: the mid band keeps the FULL 7-step metal ramp, and the
 # green LED reuses spectrum index 11 so the rainbow costs no extra grey slots.
 SPECTRA = [
     (1, 1, 9),     # 8  deep blue
@@ -63,7 +63,7 @@ BANDS = {
     "W": ({0: BLACK, 11: BLUE, 12: CYAN, 15: WHITE},
           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14]),
     "M": ({0: BLACK, 15: WHITE, **_RB},      # M_LED = spectrum green (index 11)
-          [1, 2, 3, 4, 5, 6, 7]),            # full 7-step FTA metal ramp restored
+          [1, 2, 3, 4, 5, 6, 7]),            # full 7-step metal ramp restored
     "B": ({0: BLACK, 11: AMBER, 12: VUG, 13: VUY, 14: VUR, 15: WHITE},
           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
 }

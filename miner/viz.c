@@ -519,7 +519,7 @@ static void coin(int x, int y, int w, int h)
     drawchar(x + w / 2 - 2, y + h / 2 - 3, 'B', C_BLACK);
 }
 
-/* FTA chiseled button cap; down = pressed (inverted bevel + nudged label) */
+/* chiseled button cap; down = pressed (inverted bevel + nudged label) */
 static void button(int x, int y, int w, int h, unsigned char fill,
                    const char *label, unsigned char lc, int down)
 {

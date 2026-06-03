@@ -1,4 +1,4 @@
-# Apple IIgs SHR UI Playbook — building FTA-grade dashboards
+# Apple IIgs SHR UI Playbook — building high-res dashboards
 
 Hard-won learnings from the GS Miner visualization. This is **toolchain-agnostic
 and app-agnostic** — read it before building any Super Hi-Res UI on the GS so we
@@ -57,7 +57,7 @@ is intentional. The builder *is* the source of truth for all layout coordinates
 `build_frame.py` primitives worth reusing:
 - `vgrad` (vertical gradient), `sheen` (gaussian highlight band, tunable amp) —
   metal faces.
-- `bevel` (1px 2-tone), `bevel2` (**2px chiseled, high-contrast** — the FTA look),
+- `bevel` (1px 2-tone), `bevel2` (**2px chiseled, high-contrast** — the high-relief look),
   `chamf` (1px corner chamfer) — refined, non-boxy edges.
 - `rtile` (raised cell), `recess` (cut-in well), `groove` (engraved group outline),
   `plate` (**bright near-white nameplate strip for black labels**, §5b),
@@ -71,7 +71,7 @@ is intentional. The builder *is* the source of truth for all layout coordinates
 ## 3. The palette contract — the 16-ZONE HYBRID (v3)
 
 SHR 320 mode gives **16 colors per scanline**, each line picking one of 16
-palettes via its SCB. **The single biggest "8-bit vs. FTA" lever is how you
+palettes via its SCB. **The single biggest "8-bit vs. 16-bit" lever is how you
 spend those 16 palettes.**
 
 - **v2 (wrong): 4 band palettes.** One palette for the whole header, one for the
@@ -131,7 +131,7 @@ it looked worse — reverted). (Dithering still has a place: photographic gradie
 the scope rainbow — just not brushed metal.)
 
 **(b) Crank the bevel contrast (chiaroscuro).** A subtle bevel looks like a flat
-render. FTA metal is *high contrast*: near-white specular highlights against
+render. Convincing metal is *high contrast*: near-white specular highlights against
 near-black shadow on the same edge. Use **2px chiseled bevels** (`bevel2`),
 **bright outer rims**, and **deep recesses** for the wells. The per-zone ramp
 preserving true min/max (§3) is what lets those extreme edge tones survive
@@ -150,7 +150,7 @@ in between band invisibly because the ramp is dense there.
   symbols. No anti-aliasing → survives the 4-bit palette perfectly.
   - Font-size journey: 5×7 read **chunky/oversized** on the dense chassis; 3×5 was
     **illegible** (ambiguous glyphs). **4×6 is the balance** — small enough to feel
-    like FTA labels, big enough to read. Pick the font *after* the chassis density
+    like crisp instrument labels, big enough to read. Pick the font *after* the chassis density
     is set, not before.
 - **Generate the C glyph table from the same Python source** (`gen_font_c.py` →
   `miner/font_gs.h`) so the Mac proof and the GS hardware font are byte-identical.
@@ -164,20 +164,20 @@ in between band invisibly because the ramp is dense there.
   case-significant value (wallet, base58/bech32) needs a lower-case-capable face.
 - **Never bake text into the frame image.** Static labels feel tempting (they
   never change) but still muddy on conversion. Draw them in code.
-- Reserve **label real-estate in the frame** (see §5b for the FTA treatment): the
+- Reserve **label real-estate in the frame** (see §5b for the nameplate treatment): the
   frame-without-text must *keep* the nameplates/screens — the #1 layout bug was
   empty boxes collapsing and leaving nowhere for labels.
 
 ---
 
-## 5b. The FTA text treatment: nameplates + LED screens (NOT grey-on-metal)
+## 5b. The text treatment: nameplates + LED screens (NOT grey-on-metal)
 
 The frame can be gorgeous and still "blow up" the moment you add text — because
-the text, not the metal, is what fails. FTA's secret is **where** text sits:
+the text, not the metal, is what fails. The secret is **where** text sits:
 
 - **Labels = solid black on a BRIGHT nameplate.** Build a near-white plate strip
   (`plate()` in `build_frame.py`) into the chassis and draw the label as **pure
-  black** (index 0) on it. Maximum contrast, razor clear. This is how FTA labels
+  black** (index 0) on it. Maximum contrast, razor clear. This is how crisp labels
   read so cleanly.
 - **Values = LED-green on a BLACK screen.** Numeric readouts go in a recessed
   black well and are drawn in the LED-green ink (`M_LED`). Reads as a real LED
@@ -218,7 +218,7 @@ green value and the black label into them.
 ## 7. Pitfalls log (things that bit us)
 
 - **4 band palettes = flat 8-bit** — the band is then literally 16 colors. Use 16
-  ZONES (§3); it's the difference between "amateurish" and FTA.
+  ZONES (§3); it's the difference between "amateurish" and "pro."
 - **Grey/light text on bare metal** — muddy, low-contrast. Black-on-bright-plate
   for labels, green-on-black-screen for values (§5b).
 - **Steel-tinted greys** — mixing hued greys reads worse than neutral; we reverted.
@@ -324,7 +324,7 @@ repainting every frame.
 ## 10. Decision log: 320 mode vs 640 mode
 
 The temptation: 640 mode is 2× horizontal resolution → crisper text (it matches
-how sharp FTA's text looks). The catch: **640 mode is only ~4 colors per pixel**
+how sharp classic demo text looks). The catch: **640 mode is only ~4 colors per pixel**
 (positional palette groups), so it leans on **fine dithering** for every tone and
 hue. We built a faithful proof (`viz/render_640.py`: 640-wide, 4 colors/line +
 ordered dither) and compared side-by-side with the 320 panel.
@@ -335,7 +335,7 @@ ordered dither) and compared side-by-side with the 320 panel.
 
 **Verdict:** **320 for a color UI** like this miner — rich, smooth metal + vibrant
 accents beat marginally crisper text. **640 only for a greyscale tool** (think
-FTA NoiseTracker) where text density matters more than color. Decide this *first*;
+a tracker-style tool) where text density matters more than color. Decide this *first*;
 it dictates the whole palette strategy.
 
 ---

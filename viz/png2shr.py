@@ -27,7 +27,7 @@ W, H = 320, 200
 NPAL = 16          # palettes available (SCB low nibble)
 NCOL = 16          # colours per palette (320 mode)
 
-# punch defaults (compensate for 4-bit/16-colour dullness, FTA-style snap)
+# punch defaults (compensate for 4-bit/16-colour dullness, high-contrast snap)
 SAT = 1.45         # saturation boost (punchier red logo / blue LCD / green LED)
 CON = 1.10         # contrast boost
 SHARP = 0          # unsharp-mask percent (0=off) - OFF: was amplifying metal grain

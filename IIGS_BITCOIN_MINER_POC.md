@@ -10,7 +10,7 @@ pushed onto the 16-bit GS with a hardware network card.
 > Status: **beta — FIRST LIVE MINING ON REAL HARDWARE (`GSMINE95`, V0.95, 2026-06-03).**
 > Confirmed end-to-end Stratum mining on a real Apple IIgs (14 MHz TWGS, Uthernet II in slot 2,
 > `solo.ckpool.org`) — see §16m. Mining core +
-> networking + FTA dashboard **proven end-to-end**. Stage 2 COMPLETE (M8a + M8b, §10c):
+> networking + SHR dashboard **proven end-to-end**. Stage 2 COMPLETE (M8a + M8b, §10c):
 > full Stratum on Marinetti, pool-job mining, mock shares **ACCEPT**ed. M5 midstate
 > (`GSMINE70`), M6 real-pool hardening (`GSMINE71`), M6.5 ship campaign (`GSMINE72`→`88`,
 > §16a–16d): SHA large-model fix, buffers, `mlog.c`, failover polish — **verified live on
@@ -64,7 +64,7 @@ threshold), purely so the screen has something to celebrate.
    (TransWarp/ZipGS); "it goes faster with acceleration" is a headline result.
 3. **`mock_pool.py`** — the Mac-side test pool/oracle (already built); a tidy
    show-and-tell in its own right, and what makes the build reproducible.
-4. **The visualization** — a 1990s FTA-demo / SETI@Home-waveform-style live
+4. **The visualization** — a 1990s demoscene / SETI@Home-waveform-style live
    readout of the hashing (added after the bones work; see §10a).
 5. **Write-up** — the networking spike, the hashrate/acceleration reality, and
    the gloriously useless "years-to-a-block" math.
@@ -564,9 +564,9 @@ of 10^13 years. Gloriously useless — exactly the point.
 
 ---
 
-## 10a. Visualization — the FTA / SETI@Home vibe
+## 10a. Visualization — the demoscene / SETI@Home vibe
 
-The "wow" layer for the community demo: early-90s **FTA demo** energy +
+The "wow" layer for the community demo: early-90s **demoscene** energy +
 **SETI@Home** live-activity readout — a brushed-metal mining console with LED
 readouts, a rainbow hash spectrograph, VU meters, and the "133 Trillion Yrs"
 joke. Target screen is the locked concept mockup
@@ -587,7 +587,7 @@ label strips, the chassis is rendered procedurally in `viz/build_frame.py`
 (→ `viz/frame_proc.png`). Benefits: pixel-exact layout, smooth metal, and the
 builder *is* the source of truth for every coordinate the C code reuses.
 
-**Smooth metal = clean contiguous greys, not dithering.** The FTA "silk" look
+**Smooth metal = clean contiguous greys, not dithering.** The "silk" metal look
 comes from smooth gradients snapped to a single **neutral, face-weighted grey
 ramp** (no bayer/error-diffusion on flat metal — that reads as 8-bit noise).
 Dimension from subtle 2-tone bevels + chamfered corners; "one sheet" with screws
@@ -640,7 +640,7 @@ pool**. Two modes:
   drive the panel from pool work instead of the local job.
 
 **Mode + operator settings live on a CONFIG page** (`config.shr` plate +
-`cfg_screen()` modal in `viz.c`). It's a second FTA chassis built by the same
+`cfg_screen()` modal in `viz.c`). It's a second chassis built by the same
 procedural pipeline (`viz/build_config.py` → `config_frame.png` →
 `viz/config2shr.py` → `config.shr`; Mac proof `viz/render_config.py`).
 
@@ -748,7 +748,7 @@ cd .. && ./inject_gsminer.sh -f
 
 The compute + transport + UI all exist independently; Stage 2 is **fusing the
 proven `miner.c` networking (§9a) into the `viz.c` dashboard** so LIVE mode mines
-against the Mac mock pool with the FTA readouts live.
+against the Mac mock pool with the readouts live.
 
 Plan:
 1. **Lift the Stratum/Marinetti client out of `miner.c`** into a module the
@@ -922,14 +922,14 @@ plates); `GSMINE69` pinned in `inject_gsminer.sh`.
     loop and feeds every readout (hashrate/shares/nonce/best/uptime/hashes, scope
     from digest bytes, VU/graph from rolling rate). Mouse-clickable RUN/STOP/CONFIG
     with a self-drawn cursor.
-  - **M7c — Config page + DEMO/LIVE ✅ (2026-05-31).** Second FTA chassis
+  - **M7c — Config page + DEMO/LIVE ✅ (2026-05-31).** Second chassis
     (`build_config.py`/`config2shr.py`); modal editor with live text entry,
     `MINER.CONF` persistence, LIVE|DEMO button toggle, and the Marinetti network
     state model + error states (`NO TCP`/`NO IP` badge, TCP lamp, blocked LIVE save).
     Currently shipping as **`GSMINE57`**.
 - **M8 — LIVE networking in the dashboard.** ✅ **DONE** (§10c, `GSMINE69`). Fused the
   proven `miner.c` Marinetti/Stratum client into `viz.c`, keyed off the CONFIG fields, so
-  LIVE mode mines the Mac mock pool with the FTA readouts live; yields to `TCPIPPoll`
+  LIVE mode mines the Mac mock pool with the readouts live; yields to `TCPIPPoll`
   on the frame budget; drives TCP lamp/badge from real socket state.
   - **M8a — Connect layer + DNS ✅ (2026-05-31, `GSMINE58`→`GSMINE68`).** Shared
     non-blocking `stratum.c` connect state machine (login/open → ESTABLISHED) with
@@ -1004,7 +1004,7 @@ types — see §4 gotcha.)
 4. ✅ ~~M2 Marinetti echo client~~ — DONE (§7a, `echo.c`).
 5. ✅ ~~M3/M4 Stratum handshake + mining loop + accepted shares~~ — DONE (§9a,
    `miner.c` vs `mock_pool.py`).
-6. ✅ ~~M7 FTA dashboard (live local demo + config page + DEMO/LIVE)~~ — DONE
+6. ✅ ~~M7 SHR dashboard (live local demo + config page + DEMO/LIVE)~~ — DONE
    (§10a/§10b, `viz.c`, shipping as `GSMINE57`).
 7. ✅ ~~**M8 — wire LIVE networking into the dashboard**~~ — DONE (§10c, `GSMINE69`):
    lifted the Marinetti/Stratum client out of `miner.c` into `stratum.c`/`.h` that
@@ -1512,7 +1512,7 @@ truncates (`if (n < outsz - 1)`), each parse temp matches its `g_job` field size
 `coinbase[640]` ≥ the 544-byte worst case. **No overflow, no change recommended to the V0.95 core.**
 
 **Where the payoff actually is (deferred features, not speed):**
-- **Ensoniq DOC soundtrack** — a looping FTA-style SoundSmith/multivoice track + a soft per-*N*-hash
+- **Ensoniq DOC soundtrack** — a looping SoundSmith/multivoice track + a soft per-*N*-hash
   tick, behind a **global MUTE**. Headliner delight. Patterns: `reference/antoinevignau-source/ensoniq/`.
 - **`sha256d-65816` mini-library** — package the proven double-SHA core (midstate + endianness
   handling) as a clean reusable 65816 unit. Community contribution.
