@@ -247,7 +247,7 @@ This proves SHA-256d + header assembly + **endianness** + nonce search are all
 correct on the GS toolchain — i.e. the entire compute half of the miner. What's
 left is to feed it a *live* job over the wire (§6/§7) instead of a hardcoded one.
 
-### Gotchas discovered (bank for the write-up)
+### Gotchas discovered
 - **`int` is 16-bit in ORCA/C.** SHA-256 words are 32-bit → use `unsigned long`
   (`sizeof(long)==4`), never `int` (`sizeof(int)==2`), for header fields, nonce,
   and lengths.
@@ -381,7 +381,7 @@ client at a real low-diff pool (e.g. a solo CKPool / a public testnet pool) by
 changing host/port.
 
 > The mock pool is the single most valuable piece of tooling for this project —
-> it makes an "untestable on emulator" idea fully testable. (Tracked as a todo.)
+> it makes an "untestable on emulator" idea fully testable.
 
 ---
 
@@ -1429,8 +1429,7 @@ This is inherent Finder behaviour, not a bug.
 
 **It mined.** On real Apple IIgs iron — a **14 MHz TWGS**-accelerated machine with an **Uthernet II in
 slot 2**, GS/OS 6.0.4 + Marinetti — GS Miner connected to **`solo.ckpool.org`** and ran the full live
-Stratum loop against real `mining.notify` jobs. Filed historically somewhere between Bell's first
-phone call and Doc Brown's flux-capacitor sketch. 🛹⚡
+Stratum loop against real `mining.notify` jobs.
 
 **The fix that got it there (V0.95):** the LIVE mode error on iron was **"MARINETTI NOT FOUND"** even with
 a confirmed-connected stack. Root cause: the app assumed Marinetti's TCP/IP tool set (tool $36 / `TOOL054`)
@@ -1478,13 +1477,13 @@ now renames the shipped ProDOS volume to **`GSMINER`** (cosmetic, thanks to the 
 a real **2IMG** header so the disk mounts on **CFFA3000** (a bare headerless `.2mg` was rejected as
 "invalid image" on iron — see §16l).
 
-### 16n. Final "cowboy pass" — perf reality + optimization roadmap (V0.95, 2026-06-03)
+### 16n. Pre-ship review — performance reality + optimization roadmap (V0.95, 2026-06-03)
 
-Before locking V0.95 we did a deliberate top-to-bottom review with one question: *what will the
-65816 console cowboys (the 8BITCOIN / Brutal Deluxe crowd) zero in on, and where's the real
-headroom?* The honest answer reshaped the roadmap.
+Before locking V0.95, a top-to-bottom review of the hot path to find any remaining performance
+headroom. The core is compression-bound and already tuned, which shifts the roadmap from raw
+speed to deferred features.
 
-**Perf reality — we are compression-bound, and the core is already tuned.** Reviewed the full hot
+**Perf reality — compression-bound, and the core is already tuned.** Reviewed the full hot
 path: `mine.c` (`sha256d_header` midstate fast path), Heumann's `sha256.asm` + `sha256.macros`, and
 the `viz.c` main loop. Double-SHA-256 is *fundamentally* two full 64-byte compressions per nonce,
 and Heumann's compression is already a top-tier 65816 implementation — DP-resident state with
@@ -1499,9 +1498,8 @@ than moving data, schedule computed 16 words at a time. Cycle check against meas
 | asm nonce-specialization (block-1 midstate *past round 2* — nonce is `W3`, so rounds 0–2 + schedule `W0–W17` are job-constant; fold `K+W` on the ~23 constant-`W` rounds; final-word early-out) | **~2–5%** | **Table.** Real cowboy work, bragging rights only — not a multiplier. |
 | **CPU clock** | **linear** | **The only real lever.** ~10 H/s stock → ~21 H/s @ 14 MHz TWGS (~2×) → ZipGS/turbo scales ~linearly. |
 
-Contrast with 8BITCOIN: that "exponential" win came from a cowboy rewriting a *naïve* 6502 SHA.
-Ours started from a tuned library, so the asymptote is already close. Stating this in the public
-write-up (WRITEUP §18) pre-empts the "why isn't this 10× faster?" question with the real reason.
+Contrast with 8BITCOIN, whose large speedup came from rewriting a *naïve* 6502 SHA; this project
+started from a tuned library, so the asymptote is already close.
 
 **Code-health verdict — ship the core as-is.** The hash path is correct (midstate proven by
 `miner/mstest.c`), and the entire Stratum→header buffer chain is provably bounded: `next_str()`
@@ -1509,11 +1507,11 @@ truncates (`if (n < outsz - 1)`), each parse temp matches its `g_job` field size
 (`c1[512]→coinb1[512]`, branch `[68]`), `g_hexcat[1152]` ≥ the 1088-char max concatenation, and
 `coinbase[640]` ≥ the 544-byte worst case. **No overflow, no change recommended to the V0.95 core.**
 
-**Where the payoff actually is (deferred features, not speed):**
+**Deferred features (not speed):**
 - **Ensoniq DOC soundtrack** — a looping SoundSmith/multivoice track + a soft per-*N*-hash
-  tick, behind a **global MUTE**. Headliner delight. Patterns: `reference/antoinevignau-source/ensoniq/`.
+  tick, behind a **global MUTE**. Patterns: `reference/antoinevignau-source/ensoniq/`.
 - **`sha256d-65816` mini-library** — package the proven double-SHA core (midstate + endianness
-  handling) as a clean reusable 65816 unit. Community contribution.
+  handling) as a clean reusable 65816 unit.
 - **Novel 3200 hash visualizer** — *only if functional*: a full-screen "screensaver" where the live
   digest stream paints evolving 3200-colour art (PicViewer technique). A static boot splash that
   flips into 16-colour ops would feel weak; a hash-driven visualizer is novel.

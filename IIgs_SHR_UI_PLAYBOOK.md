@@ -215,7 +215,7 @@ green value and the black label into them.
 
 ---
 
-## 7. Pitfalls log (things that bit us)
+## 7. Pitfalls log
 
 - **4 band palettes = flat 8-bit** — the band is then literally 16 colors. Use 16
   ZONES (§3); it's the difference between "amateurish" and "pro."
@@ -255,7 +255,7 @@ green value and the black label into them.
 
 ---
 
-## 8. The visual-iteration discipline (it's slow; do it right)
+## 8. The visual-iteration discipline
 
 - Always review a **2× nearest-neighbor preview** (`*_2x.png`) — judge it as
   pixels, not a smooth photo.
