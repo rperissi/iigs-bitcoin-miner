@@ -22,6 +22,8 @@ Inspired by Charles Mangin’s Apple IIe [**8BITCOIN**](https://retroconnector.c
 
 GS Miner is a **complete, full-stack application**, not a tech demo. It boots, configures, networks, mines, visualizes, and logs — and the same binary runs on **any** Apple IIGS or emulator, network or not.
 
+> **What you need:** it’s a **GS/OS desktop application** — it runs under **GS/OS (System 6.0.x)**, not a bare-metal boot disk, so launch it from the Finder on any GS or emulator. **DEMO mode needs only GS/OS**; **LIVE mode** also needs **Marinetti TCP/IP** connected (e.g. Uthernet II, or an emulator with TCP). Full list in [Requirements](#requirements).
+
 **Runs anywhere**
 - **DEMO mode (default)** — boots straight into the full dashboard and a real local SHA-256d loop on **any GS or emulator, no network required**. Watch the spectrum, scope, and graphs immediately.
 - **Portable install** — the app resolves its data (`SYSFILES/`) relative to wherever it is launched (GS/OS prefix `1/`, with volume fallbacks), so the **binary + `SYSFILES/` + `Icons/` run from any folder on any volume**, not just the shipped `GSMINER` disk.
@@ -66,9 +68,9 @@ GS Miner is a **complete, full-stack application**, not a tech demo. It boots, c
 
 ## Requirements
 
-- **Apple IIGS** with **GS/OS**
-- **Marinetti TCP/IP** installed and connected (Uthernet II, or an emulator with working TCP — e.g. Ample/MAME with Marinetti configured)
-- For **LIVE mode:** pool hostname/IP, port, worker name, and wallet (payout address) in CONFIG
+- **Apple IIGS booted into GS/OS** (System 6.0.x). GS Miner is a **GS/OS application launched from the Finder** — not a bare-metal/ProDOS 8 boot disk.
+- **DEMO mode:** GS/OS only — no network, no extra setup.
+- **LIVE mode:** **Marinetti TCP/IP** installed and connected (Uthernet II, or an emulator with working TCP — e.g. Ample/MAME with Marinetti configured), plus a pool hostname/IP, port, worker name, and wallet (payout address) entered in CONFIG.
 
 ---
 
