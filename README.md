@@ -58,7 +58,7 @@ GS Miner is a **complete, full-stack application**, not a tech demo. It boots, c
 
 | Asset | Description |
 |-------|-------------|
-| **[Latest release disk](releases/)** | ProDOS `2MG` image — mount or write to media, boot GS/OS, open `/GSMINER/GSMINE95` (rev may vary) |
+| **[Latest release disk](https://github.com/rperissi/iigs-bitcoin-miner/releases/latest)** | ProDOS `2MG` image — mount or write to media, boot GS/OS, open `/GSMINER/GSMINE95` (rev may vary) |
 | **`scripts/mock_pool.py`** | Mac-side Stratum pool for LAN testing (optional) |
 | **`scripts/dump_minerlog.sh`** | Pull diagnostic logs off the disk image (host Mac, requires Java + AppleCommander) |
 
