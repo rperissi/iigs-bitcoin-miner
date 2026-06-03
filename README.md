@@ -144,10 +144,12 @@ That silence on SHARES is **probability**, not the app refusing to mine or submi
 
 Each hash is roughly a fair coin flip. Need **≥ N** leading zero bits → expect about **2^N** tries on average:
 
-| Target | Expected hashes | ~10 H/s (stock GS) | ~1 kH/s (hypothetical “turbo” GS*) |
-|--------|-----------------|--------------------|-------------------------------------|
-| **32 bits** (diff ≈ 1) | ~4.3 billion | ~**14 years** avg | ~**50 days** avg |
-| **45 bits** (seen on ckpool) | ~35 trillion | ~**110,000 years** avg | ~**1,100 years** avg |
+| Target | Expected hashes | ~10 H/s (stock 2.8 MHz GS) | ~22 H/s (14 MHz TWGS†) | ~1 kH/s (hypothetical “turbo” GS*) |
+|--------|-----------------|----------------------------|------------------------|-------------------------------------|
+| **32 bits** (diff ≈ 1) | ~4.3 billion | ~**14 years** avg | ~**6 years** avg | ~**50 days** avg |
+| **45 bits** (seen on ckpool) | ~35 trillion | ~**110,000 years** avg | ~**50,000 years** avg | ~**1,100 years** avg |
+
+†**Measured**, not projected — 22 H/s on the real 14 MHz TransWarp GS rig shown above. Roughly 2× the stock GS, so the expected wait roughly halves — but “halved” still leaves a 32-bit share **~6 years** away on average.
 
 \*Rough scaling only: if SHA-256d throughput scaled linearly with clock, 300 MHz vs 2.8 MHz ≈ **100×** → ~**1,000 H/s**. Still tiny vs a modern ASIC, but a fast emulator pointed at a **public** hostname would play by the same rules — hit the target, get a submit; miss it, stay quiet.
 
