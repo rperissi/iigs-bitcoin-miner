@@ -19,8 +19,8 @@ pushed onto the 16-bit GS with a hardware network card.
 > perf fix (~**9–10 H/s** on stock 2.8 MHz). **User-facing README** drafted (LIVE vs DEMO,
 > submit **filtering** vs hard no-submit, turbo-GS lottery math, mock pool, build-from-source
 > prerequisites). **Held before inject:** in-app logo/branding (`branding/`, `viz/build_logo.py`).
-> **Next:** gold-master disk → GitHub release (FB post); source drop + baseline cleanup a few
-> days after. Optional: M-accel on real TWGS/ZipGS. See §11 / §16h.
+> **Next:** gold-master disk + source on GitHub; baseline cleanup. Optional: M-accel on real
+> TWGS/ZipGS. See §11 / §16h.
 
 ---
 
@@ -907,9 +907,9 @@ plates); `GSMINE69` pinned in `inject_gsminer.sh`.
   (`GSMINE82`→`88`). **Verified mining live on `solo.ckpool.org` from a fresh-boot shipped disk.**
 - **M-release — Ship prep + GitHub release.** 🔄 **`GSMINE89`→`94` (V0.89→V0.94), §16f–16g-2 + §16i + §16k.**
   ✅ `SYSFILES/` layout, Finder icon, live JOBS / NET DIFF / BLOCK, perf (~9–10 H/s), user README
-  (submit filtering, turbo-GS lottery table, mock pool, build prerequisites), `RELEASE_COMMS.md`,
+  (submit filtering, turbo-GS lottery table, mock pool, build prerequisites),
   **in-app gold GS / red MINER logo** (runtime SHR blit + dynamic version stamp — `GSMINE94`, §16k).
-  ⬜ Gold-master `.2mg` on GitHub; FB post; LICENSE; source drop + baseline cleanup. See §16h.
+  ⬜ Gold-master `.2mg` + source on GitHub; baseline cleanup. See §16h.
 - **M-accel — Acceleration story.** ⬜ Measure real GS hashrate in Ample
   (stock 2.8 MHz vs accelerated); document the multiplier.
 - **M7 — Visualization / polish.** 🔄 Stage 1 shipping (§10a/§10b; full method in
@@ -1025,7 +1025,7 @@ types — see §4 gotcha.)
    model (`occ -b`); `mine.c`/`numfmt.c` split. Connects cleanly to Solo CKPool / public-pool;
    at ~8 H/s the worker shows online but submits nothing (no reject spam). Mock keeps flowing
    easy shares via a sub-1 dev difficulty. Locked at `baseline/m6_realpool_GSMINE71/`.
-10. 🔄 **Release + optional milestones**: GitHub disk drop + comms (§16h); **M-accel**
+10. 🔄 **Release + optional milestones**: GitHub disk + source (§16h); **M-accel**
     stock-vs-accelerated hashrate on real iron; optional draw-path perf tuning; optional
     outer-hash early-exit (§15). *Declined for ship:* "submit best-effort weak shares" —
     pools reject below target; documented as hygiene filtering in README §16i.
@@ -1238,7 +1238,7 @@ cd .. && ./inject_gsminer.sh -f            # injects GSMINE<NN> from APPVER; kee
 ### 16f. Ship-readiness pass ✅ (`GSMINE89`→`90`, V0.89→V0.90)
 
 - **`SYSFILES/` refactor** ✅ (`GSMINE89`, V0.89) — all runtime/system files moved off the volume
-  root into `/MINERAPPS/SYSFILES/` so a first-time user sees a clean three-item disk:
+  root into `/GSMINER/SYSFILES/` so a first-time user sees a clean three-item disk:
   the app, the `SYSFILES` folder, and `Icons/`. Hardcoded paths bumped in `viz.c`
   (`PANEL_PATH`, `CONFIG_PATH`), `mlog.c` (`LOG_PATH`, `LOG_OLD`), `cfg.h` (`CONF_PATH`).
   `Icons/` MUST stay at the volume root — the Finder only scans `<vol>/Icons/` for `$CA` files.
@@ -1322,11 +1322,10 @@ Bottom-left scope well:
 |------|--------|
 | **Shipping build** | **`GSMINE95` / V0.95** — beta gold master; multi-hour soaks stable; first live mining on real hardware |
 | **User README** | ✅ LIVE vs DEMO, submit filtering, hash lottery / turbo-GS note, CONFIG, mock pool, credits |
-| **`RELEASE_COMMS.md`** | ✅ FB post draft, GitHub release notes, repo layout checklist |
 | **In-app logo / branding** | ✅ gold GS / red MINER blitted at runtime into the SHR well + dynamic version stamp (`GSMINE94`, §16k) |
 | **Gold-master disk → GitHub Release** | ⬜ `make_master.sh` + attach `.2mg` (not dev `apps.2mg`) |
 | **LICENSE** | ✅ MIT (`LICENSE`) + ISC note for vendored `65816-crypto/` |
-| **Source drop** | ⬜ few days after disk — `miner/`, patched `65816-crypto/`, build scripts, trimmed docs |
+| **Source** | ✅ in this repo — `miner/`, patched `65816-crypto/`, build scripts, trimmed docs |
 | **M-accel (TWGS/ZipGS)** | ⬜ optional real-iron hashrate multiplier |
 | **Draw-path perf** | ⬜ optional; V0.95 already ~9–10 H/s on stock 2.8 MHz |
 
@@ -1362,8 +1361,7 @@ future accelerated hardware.
 flood the pool with **rejects** (`result: false`) and risk rate-limit / disconnect. We filter shares
 **we know will fail** — hygiene, not fake mining.
 
-**User doc:** full prose in root **`README.md`** ("Is this really mining?"). Comms summary in
-**`RELEASE_COMMS.md`** internal notes.
+**User doc:** full prose in root **`README.md`** ("Is this really mining?").
 
 ### 16j. V0.93 perf note
 
@@ -1412,18 +1410,18 @@ no header, exactly 819200 = 1600×512 bytes); `miner_boot.2mg` starts `2IMG` and
   `SYSFILES/` + `Icons/`, no `FINDER.DATA`/old revs). The raw `apps.2mg` stays headerless for the
   AppleCommander+Ample dev loop.
 
-**2. App died at launch: `cannot open /MINERAPPS/SYSFILES/PANEL`** when the three parts were copied
-into a *folder* named MINERAPPS (vs. a *volume* named MINERAPPS). The old code hard-coded absolute
-paths, which only resolve when the volume itself is MINERAPPS.
+**2. App died at launch: `cannot open /GSMINER/SYSFILES/PANEL`** when the three parts were copied
+into a *folder* named GSMINER (vs. a *volume* named GSMINER). The old code hard-coded absolute
+paths, which only resolve when the volume itself is GSMINER.
 - **Fix:** new **`miner/paths.c`** (`paths_init()` + `miner_sysfile()`). Data dir resolves to
   **`1/SYSFILES/`** (GS/OS prefix 1 = the directory the app was launched from → copy-anywhere), with a
-  fallback to **`/MINERAPPS/SYSFILES/`** so the shipped volume still works. Probed once at startup
+  fallback to **`/GSMINER/SYSFILES/`** so the shipped volume still works. Probed once at startup
   (does `<base>PANEL` open?) and cached; `viz.c`/`cfg.c`/`mlog.c` all route file I/O through it. A ring
   of static result buffers keeps `rename(LOG, OLD)` valid. New build line adds `paths.c`.
 
 **Known caveat — Finder icons are volume-scoped.** GS/OS Finder loads icon files only from a volume's
 root `Icons/` folder, so `GSMINER.ICONS` shows only when it sits at the **volume root** (true on the
-`/MINERAPPS` disk). Copy the parts into a *subfolder* and the app still runs (data is now relative) but
+`/GSMINER` disk). Copy the parts into a *subfolder* and the app still runs (data is now relative) but
 the custom coin icon won't appear unless `GSMINER.ICONS` is also placed in that volume's root `Icons/`.
 This is inherent Finder behaviour, not a bug.
 
@@ -1475,7 +1473,7 @@ T+136.11 BYE                           ← clean shutdown
 word (`0x8000` printed as `-32768`).
 
 **Portability + finished-look (workflow, applies to the next master):** `miner/paths.c` resolves data
-app-relative (`1/SYSFILES/`) with `/GSMINER/SYSFILES/` and `/MINERAPPS/SYSFILES/` fallbacks; `make_master.sh`
+app-relative (`1/SYSFILES/`) with a `/GSMINER/SYSFILES/` fallback; `make_master.sh`
 now renames the shipped ProDOS volume to **`GSMINER`** (cosmetic, thanks to the fallback list) and wraps
 a real **2IMG** header so the disk mounts on **CFFA3000** (a bare headerless `.2mg` was rejected as
 "invalid image" on iron — see §16l).

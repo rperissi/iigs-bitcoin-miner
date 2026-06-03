@@ -2,8 +2,8 @@
  * mlog.h - tiny on-disk diagnostic log for the GS miner.
  *
  * Two capped files on the boot volume (rotation, never unbounded growth):
- *   /MINERAPPS/SYSFILES/MINER.LOG  - the current session (being filled)
- *   /MINERAPPS/SYSFILES/MINER.OLD  - the previous full block
+ *   /GSMINER/SYSFILES/MINER.LOG  - the current session (being filled)
+ *   /GSMINER/SYSFILES/MINER.OLD  - the previous full block
  * Each is hard-capped at LOG_CAP bytes; when MINER.LOG fills (or on launch) it
  * rotates to MINER.OLD and a fresh MINER.LOG starts. So you always have the most
  * recent ~16KB of activity (current + prior) on a tiny floppy, and never lose more

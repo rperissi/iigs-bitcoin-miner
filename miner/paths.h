@@ -4,7 +4,7 @@
  * All on-disk data (PANEL, CONFIG, MINER.CONF/LOG/OLD) lives in <appdir>/SYSFILES/.
  * Call paths_init() ONCE at startup (before any data file is opened); afterwards
  * miner_sysfile("PANEL") etc. returns a full pathname to that file. See paths.c for
- * why this beats the old hard-coded /MINERAPPS/SYSFILES/... absolute paths.
+ * why this beats the old hard-coded /GSMINER/SYSFILES/... absolute paths.
  */
 #ifndef PATHS_H
 #define PATHS_H

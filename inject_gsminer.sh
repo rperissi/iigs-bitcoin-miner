@@ -68,7 +68,7 @@ cat "$SRC" | "$JAVA" -jar "$AC" -p "$IMG" "$APP" S16 '$0000'
 # Data files live in <appdir>/SYSFILES/ so the disk root shows just the app +
 # the SYSFILES folder + the (root-mandated) Icons folder. The app finds them at
 # runtime relative to its own launch dir (GS/OS prefix 1 -> miner_sysfile() in
-# miner/paths.c), falling back to /MINERAPPS/SYSFILES/..., so the parts also work
+# miner/paths.c), falling back to /GSMINER/SYSFILES/..., so the parts also work
 # copied into any folder. AppleCommander auto-creates SYSFILES. Purge any legacy
 # root PANEL/CONFIG from older builds.
 for legacy in PANEL CONFIG; do

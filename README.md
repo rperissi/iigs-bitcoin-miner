@@ -8,9 +8,9 @@ Inspired by Charles Mangin’s Apple IIe [**8BITCOIN**](https://retroconnector.c
 
 ![GS Miner CONFIG page — pool, wallet, and DEMO/LIVE toggle](branding/gsminer_v095_config.png)
 
-> **Beta — `GSMINE95` (V0.95), 2026-06-03 — gold master.** 🏆 First confirmed LIVE mining on real Apple IIgs hardware (14 MHz TWGS + Uthernet II on `solo.ckpool.org`). Shippable 2IMG / CFFA-mountable `GSMINER` disk, long soaks stable (~9–10 H/s stock 2.8 MHz, ~21 H/s on the 14 MHz GS). **Source code** posted in a few days after final doc/baseline cleanup — the release disk runs now.
+> **Beta — `GSMINE95` (V0.95), 2026-06-03 — gold master.** 🏆 First confirmed LIVE mining on real Apple IIgs hardware (14 MHz TWGS + Uthernet II on `solo.ckpool.org`). Shippable 2IMG / CFFA-mountable `GSMINER` disk, long soaks stable (~9–10 H/s stock 2.8 MHz, ~21 H/s on the 14 MHz GS). Full source, build scripts, and docs are in this repo; the release disk runs now.
 >
-> **Done:** user README, submit-filtering docs, Finder icon, `SYSFILES/` layout, live NET DIFF/BLOCK/JOBS, **in-app gold GS / red MINER logo** (rendered at runtime into the SHR logo well with a dynamic version stamp), portable app-relative paths, 2IMG/CFFA gold-master `GSMINER` disk, **first live mining on real hardware**. **Next:** GitHub source drop + announcement post.
+> **Done:** user README, submit-filtering docs, Finder icon, `SYSFILES/` layout, live NET DIFF/BLOCK/JOBS, **in-app gold GS / red MINER logo** (rendered at runtime into the SHR logo well with a dynamic version stamp), portable app-relative paths, 2IMG/CFFA gold-master `GSMINER` disk, **first live mining on real hardware**. **Next:** announcement post.
 
 📖 **Read the full story** — background, architecture deep-dives, milestone-by-milestone build, the revisions, and the war stories: **[`WRITEUP.md`](WRITEUP.md)**.
 
@@ -196,13 +196,13 @@ Requires `AppleCommander.jar` in the repo root (bring your own if not redistribu
 | **Crypto** | `lib65816hash` (`sha256_processblock` in the hot path) |
 | **UI** | Cooperative loop: hash + periodic SHR redraw |
 
-Full architecture notes will ship with the source drop (`docs/` / build history).
+Full architecture notes are in [`WRITEUP.md`](WRITEUP.md) and [`IIGS_BITCOIN_MINER_POC.md`](IIGS_BITCOIN_MINER_POC.md).
 
 ---
 
 ## Building from source
 
-**Coming in a few days** with the full repository: `miner/` sources, patched `65816-crypto/`, build scripts (`inject_gsminer.sh`, `make_master.sh`), and offline tests (`mstest`, `bench`, `livetest`).
+The full source is in this repo: `miner/` sources, patched `65816-crypto/`, and build scripts (`inject_gsminer.sh`, `make_master.sh`).
 
 **Not required to run the release disk** — only if you want to compile from source on a Mac.
 
@@ -236,7 +236,7 @@ GS Miner is built with **ORCA/C** (large memory model, `occ -b`), linking **ORCA
 
 - **AppleCommander** — disk image inject and log extraction on the Mac (not bundled in this repo)
 
-Implementation driven and tested on real/emulated hardware; modern coding assistants used heavily for development. Issues and optimizations welcome once source is posted.
+Implementation driven and tested on real/emulated hardware; modern coding assistants used heavily for development. Issues and optimizations welcome.
 
 ---
 
@@ -246,7 +246,7 @@ This is a hobby / demonstration project. It does not provide financial advice. Y
 
 ---
 
-## Internal / release notes
+## Further reading
 
 The full narrative write-up (background, architecture, milestones, revs, war stories): [`WRITEUP.md`](WRITEUP.md)
 

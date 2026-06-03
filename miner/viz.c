@@ -62,7 +62,7 @@
 #define TICKS_PER_SEC 60UL
 /* PANEL / CONFIG plates live in <appdir>/SYSFILES/ - resolved at runtime via
  * miner_sysfile() (see paths.c) so the app works from any folder, not just a volume
- * literally named MINERAPPS. */
+ * literally named GSMINER. */
 
 /* ---- CONFIG page geometry (mirrors viz/build_config.py) ---- */
 #define CF_LBL_X      10
@@ -221,7 +221,7 @@
  * (Con Kolivas' long-running, multi-node solo pool - rock-solid uptime) with
  * FAILOVER to public-pool.io (open-source, nice dashboard, but single-node/flakier).
  * For dev, point POOL at the Mac mock (mock_pool.py, 192.168.2.1:3333) by hand.
- * These are RAM-mutable; Stage 3b persists them to /MINERAPPS/SYSFILES/MINER.CONF. */
+ * These are RAM-mutable; Stage 3b persists them to /GSMINER/SYSFILES/MINER.CONF. */
 /* non-static: shared with cfg.c (the CONFIG subsystem, a dynamic segment) via cfg.h */
 char cfg_mode[8]    = "DEMO";
 char cfg_worker[20] = "GSMINER";

@@ -384,7 +384,7 @@ The miner dashboard from this playbook ships as **`GSMINE95` / V0.95** (`miner/v
 | Stratum LIVE (`stratum.c`) + `SYSFILES/` paths | ✅ |
 | Custom Finder icon (`viz/build_icon.py`) | ✅ |
 | In-app logo well — gold **GS** / red **MINER** + dynamic `v0.95` stamp | ✅ runtime SHR blit (`miner/logo_gs.h` + `draw_logo()`); see POC §16k |
-| User docs | ✅ `README.md`, `RELEASE_COMMS.md`, POC §16 |
+| User docs | ✅ `README.md`, POC §16 |
 
 **Porting a proof to a runtime blit (reusable pattern):** rasterise the art to **palette indices**
 in the Mac proof (`logo_depth_proof.py` `render_well_idx()` → `miner/logo_gs.h`), reserve **255 =

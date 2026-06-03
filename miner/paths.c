@@ -2,17 +2,17 @@
  * paths.c - locate the GS Miner data directory at runtime (portable install).
  *
  * Every data file (PANEL, CONFIG, MINER.CONF/LOG/OLD) lives in <appdir>/SYSFILES/.
- * Historically the code hard-coded "/MINERAPPS/SYSFILES/...", which only resolves when
- * the *volume* is named MINERAPPS (the shipped apps disk). Copy the three parts (the
+ * Hard-coding an absolute path like "/GSMINER/SYSFILES/..." only resolves when the
+ * *volume* is named GSMINER (the shipped apps disk). Copy the three parts (the
  * app, the SYSFILES folder, the Icons folder) into a folder on another volume and that
- * absolute path breaks - on real hardware the app died at launch with
- *     cannot open /MINERAPPS/SYSFILES/PANEL
+ * absolute path breaks - on real hardware the app would die at launch with
+ *     cannot open /GSMINER/SYSFILES/PANEL
  *
  * Fix: prefer a path relative to GS/OS prefix 1. When GS/OS launches an application it
  * sets prefix 1 to the directory the app was loaded from, so "1/SYSFILES/PANEL" finds
- * SYSFILES sitting next to the app in ANY folder, on ANY volume. We keep the legacy
- * absolute path as a fallback so the original /MINERAPPS disk (and any launch that does
- * not set prefix 1 the way we expect) still works.
+ * SYSFILES sitting next to the app in ANY folder, on ANY volume. We keep the shipped
+ * volume's absolute path (/GSMINER/SYSFILES/) as a fallback for any launch that does
+ * not set prefix 1 the way we expect.
  *
  * The base is probed once at paths_init() - we try each candidate's PANEL (which always
  * ships in SYSFILES) and cache the first that opens. miner_sysfile() then just joins the
@@ -29,10 +29,9 @@
 
 static const char *const BASES[] = {
     "1/SYSFILES/",            /* app-relative: prefix 1 = launch dir -> copy-anywhere */
-    "/GSMINER/SYSFILES/",     /* shipped volume name (current disks)                  */
-    "/MINERAPPS/SYSFILES/"    /* legacy volume name (older disks)                     */
+    "/GSMINER/SYSFILES/"      /* shipped volume name fallback                          */
 };
-#define NBASE 3
+#define NBASE 2
 
 static const char *g_base = 0;      /* resolved data-dir base (always ends in '/') */
 static char        g_ring[4][80];   /* >=2 live results so rename(a,b) stays valid  */

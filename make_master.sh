@@ -1,16 +1,16 @@
 #!/bin/bash
-# make_master.sh - build a pristine, shippable MINERAPPS disk (apps_master.2mg).
+# make_master.sh - build a pristine, shippable GSMINER disk (apps_master.2mg).
 #
 # Clean first-open layout (only these are visible in the Finder):
-#   /MINERAPPS/GSMINE<rev>      the application (S16)
-#   /MINERAPPS/SYSFILES/        PANEL, CONFIG  (+ MINER.CONF/LOG/OLD created at run)
-#   /MINERAPPS/Icons/           GSMINER.ICONS  (must live at the volume root)
+#   /GSMINER/GSMINE<rev>      the application (S16)
+#   /GSMINER/SYSFILES/        PANEL, CONFIG  (+ MINER.CONF/LOG/OLD created at run)
+#   /GSMINER/Icons/           GSMINER.ICONS  (must live at the volume root)
 #
 # We clone a known-good ProDOS-order image (apps_dev_backup.2mg) so the disk geometry
 # stays MAME-friendly, wipe the visible dev clutter, then lay down the clean structure.
 # The app finds its data RELATIVE to where it was launched (GS/OS prefix 1 -> miner_sysfile()
-# in miner/paths.c), with a fallback to /MINERAPPS/SYSFILES/..., so the three parts work
-# from any folder/volume - not just a volume literally named MINERAPPS.
+# in miner/paths.c), with a fallback to /GSMINER/SYSFILES/..., so the three parts work
+# from any folder/volume - not just a volume literally named GSMINER.
 #
 # The clone is a *headerless* ProDOS-order image (good for AppleCommander + emulators),
 # so as a final step we wrap a copy in a real 2IMG header (wrap_2mg.py) -> the shippable
@@ -68,7 +68,7 @@ cat "$PANEL_SRC"  | "$JAVA" -jar "$AC" -p "$OUT" SYSFILES/PANEL  BIN '$0000'
 cat "$CONFIG_SRC" | "$JAVA" -jar "$AC" -p "$OUT" SYSFILES/CONFIG BIN '$0000'
 cat "$ICON"       | "$JAVA" -jar "$AC" -p "$OUT" Icons/GSMINER.ICONS ICN
 
-# Rename the ProDOS volume for a finished look (/GSMINER/ instead of /MINERAPPS/). Done
+# Rename the ProDOS volume to /GSMINER/ for a finished look. Done
 # AFTER all add/delete ops, which address files relative to the volume root. The app reads
 # its data app-relative (prefix 1) with a /GSMINER/SYSFILES fallback, so the name is cosmetic.
 echo "--- renaming volume -> ${VOLNAME} ---"

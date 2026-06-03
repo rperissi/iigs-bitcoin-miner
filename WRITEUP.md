@@ -226,7 +226,7 @@ We build **natively on a Mac** and produce a **real IIGS binary** that runs in A
   ```
 
 - **Inject** onto the ProDOS disk image with **AppleCommander** (`inject_gsminer.sh`): the app
-  goes to `/MINERAPPS/GSMINE<rev>`, data plates + icon to `SYSFILES/` and `Icons/`.
+  goes to `/GSMINER/GSMINE<rev>`, data plates + icon to `SYSFILES/` and `Icons/`.
 - **Run** in **Ample** (MAME-based GS emulator) with Marinetti + Uthernet II configured, or on
   real iron.
 
@@ -252,7 +252,7 @@ We build **natively on a Mac** and produce a **real IIGS binary** that runs in A
 | **M6.5** | Real-pool LIVE + ship hardening | ✅ `GSMINE72`→`88` — **verified live on `solo.ckpool.org`** |
 | **M7** | Visualization / SHR dashboard | 🔄 shipping (Stage 1+2); method in the SHR playbook |
 | **M8a/b** | LIVE Stratum wired into dashboard | ✅ cooperative client; panel stays live during net I/O |
-| **M-rel** | Ship prep + in-app logo | 🔄 `GSMINE89`→`94` — README, comms, `SYSFILES/`, icon, **gold logo** |
+| **M-rel** | Ship prep + in-app logo | 🔄 `GSMINE89`→`94` — README, `SYSFILES/`, icon, **gold logo** |
 | **M-accel** | Acceleration story | ⬜ measure stock vs accelerated multiplier |
 
 Full prose for every milestone (with dates and code pointers) is in POC §11 + §16.
@@ -274,7 +274,7 @@ under [`baseline/`](baseline/):
 | V0.71 | `m6_realpool_GSMINE71` | M6 — real-pool correctness |
 | V0.76 | `m6fix_GSMINE76` | **SHA large-model (`occ -b`) DBR fix** (§12) |
 | V0.72–88 | — | ship hardening: buffers, `mlog.c`, failover polish, clean-ship disk |
-| V0.89–93 | — | `SYSFILES/`, Finder icon, live JOBS/NET DIFF/BLOCK, README + comms |
+| V0.89–93 | — | `SYSFILES/`, Finder icon, live JOBS/NET DIFF/BLOCK, README |
 | **V0.94** | `GSMINE94` | **in-app gold GS / red MINER logo** + dynamic `v0.94` stamp (§14) |
 | **V0.95** | `GSMINE95` | **🏆 first LIVE mining on real hardware** — Marinetti `LoadOneTool(54)`+`TCPIPStartUp()` fix, portable app-relative paths, 2IMG-wrapped CFFA-mountable disk, `GSMINER` volume |
 
@@ -397,8 +397,6 @@ target), and watch the full submit → ACCEPT path. Pull logs off the disk with 
 
 ## 17. Credits & references
 
-> **Pre-publish TODO:** double-check every attribution/name below before the repo goes public.
-
 - **Charles Mangin** — Apple //e **8BITCOIN** (2019), the direct inspiration.
 - **Stephen Heumann** — **`sheumann/65816-crypto`**, the hand-tuned 65816 SHA-256 we build on.
 - **Kelvin Sherlock** — **Golden Gate** (native ORCA toolchain) + ORCA tooling.
@@ -464,7 +462,6 @@ V0.95 core** — it ships as-is.
 
 - **Gold-master release** — `make_master.sh` clean `.2mg` (CFFA-ready, `GSMINER` volume) on GitHub
   Releases + LICENSE.
-- **Source drop** — `miner/`, patched `65816-crypto/`, build scripts, trimmed docs.
 - **M-accel** — measured hashrate on accelerated hardware/emulation, replacing the "turbo GS"
   asterisk with a real multiplier.
 
