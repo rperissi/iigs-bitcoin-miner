@@ -52,8 +52,6 @@ GS Miner is a **complete, full-stack application**, not a tech demo. It boots, c
 **Diagnostics**
 - **On-disk diagnostic logging** — event-driven, timestamped, rotating logs you can pull off the disk and parse on the host (see [Diagnostic logs](#diagnostic-logs)).
 
-> *Planned:* an Ensoniq DOC soundtrack with a mute toggle. Sound/music is still TBD and can be added later without touching the mining stack.
-
 ---
 
 ## Download

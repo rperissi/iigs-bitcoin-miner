@@ -310,17 +310,18 @@ under [`baseline/`](baseline/):
 
 ## 13. Performance & the "turbo GS" lottery
 
-Measured: **~9–10 H/s** on a stock 2.8 MHz GS (`GSMINE94`). Expected tries to land a share is a
-geometric distribution with mean ≈ 2^N for an N-bit target:
+Measured: **~9–10 H/s** on a stock 2.8 MHz GS (`GSMINE94`), and **22 H/s** on a 14 MHz TransWarp GS
+(real hardware). Expected tries to land a share is a geometric distribution with mean ≈ 2^N for an
+N-bit target:
 
-| Target | ~Hashes | @ ~10 H/s (stock) | @ ~1 kH/s (turbo GS\*) |
-|---|---|---|---|
-| 32 bits | 4.3×10⁹ | ~14 years | ~50 days |
-| 45 bits | 3.5×10¹³ | ~110k years | ~1.1k years |
+| Target | ~Hashes | @ ~10 H/s (stock) | @ ~22 H/s (14 MHz TWGS†) | @ ~1 kH/s (turbo GS\*) |
+|---|---|---|---|---|
+| 32 bits | 4.3×10⁹ | ~14 years | ~6 years | ~50 days |
+| 45 bits | 3.5×10¹³ | ~110k years | ~50k years | ~1.1k years |
 
-\*Rough linear clock scaling at a hypothetical ~300 MHz; **not** a measured build. The point:
-the submit gate isn't a "no" — it's a filter. A valid hit always submits. M-accel will replace
-the asterisk with a real accelerated-hardware number.
+†**Measured**, not projected — 22 H/s on the real 14 MHz TWGS rig (≈2× stock, so the wait roughly
+halves). \*Rough linear clock scaling at a hypothetical ~300 MHz; **not** a measured build. The point:
+the submit gate isn't a "no" — it's a filter. A valid hit always submits.
 
 ---
 
@@ -439,22 +440,15 @@ buffer chain is provably bounded (`next_str` truncates; every temp matches its `
 `g_hexcat[1152]` ≥ the 1088-char max; `coinbase[640]` ≥ 544 B). **No change recommended to the
 V0.95 core** — it ships as-is.
 
-### Where the payoff actually is (demo-scene flexes)
+### Where the payoff actually is
 
-- **Ensoniq DOC soundtrack** — a looping SoundSmith/multivoice track (thumping,
-  futuristic, catchy-not-grating) plus a soft per-*N*-hash tick, behind a **global MUTE** that
-  silences everything. Patterns: `reference/antoinevignau-source/ensoniq/`. *This is the headliner.*
 - **`sha256d-65816` mini-library** — package the proven double-SHA core as a clean, documented,
   reusable 65816 unit so the next person doesn't have to rediscover the midstate/endianness dance.
-- **Novel 3200 visualiser (only if it's *functional*)** — not a static splash (that'd feel weak
-  flipping into 16-colour ops). The idea worth building is a full-screen **hash-driven
-  "screensaver"** where the live digest stream paints evolving 3200-colour art (PicViewer
-  technique: `reference/.../picviewer/`, `PICVIEWER_3200_REFERENCE.md`). No miner has done this.
 
 ### Explicitly dropped (and why)
 
-- **"Share found" fanfare** — the target is unreachable at our hashrate, so it would *never* fire.
-  Building a celebration for an event that can't happen is pure dead code.
+- **"Share found" celebration** — the target is unreachable at our hashrate, so it would *never*
+  fire. Building a celebration for an event that can't happen is pure dead code.
 - **CPU-speed auto-detect / H-per-MHz readout** — the TWGS / ZipGS / AppleSqueezer / emulator-turbo
   permutation matrix makes a reliable reading more trouble than it's worth.
 - **Best-bits leaderboard** — the realistic user count is too small for cross-machine bragging.

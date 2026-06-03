@@ -1508,16 +1508,11 @@ truncates (`if (n < outsz - 1)`), each parse temp matches its `g_job` field size
 `coinbase[640]` ≥ the 544-byte worst case. **No overflow, no change recommended to the V0.95 core.**
 
 **Deferred features (not speed):**
-- **Ensoniq DOC soundtrack** — a looping SoundSmith/multivoice track + a soft per-*N*-hash
-  tick, behind a **global MUTE**. Patterns: `reference/antoinevignau-source/ensoniq/`.
 - **`sha256d-65816` mini-library** — package the proven double-SHA core (midstate + endianness
   handling) as a clean reusable 65816 unit.
-- **Novel 3200 hash visualizer** — *only if functional*: a full-screen "screensaver" where the live
-  digest stream paints evolving 3200-colour art (PicViewer technique). A static boot splash that
-  flips into 16-colour ops would feel weak; a hash-driven visualizer is novel.
 
 **Explicitly dropped (with rationale):**
-- **"Share found" fanfare** — unreachable target ⇒ it would *never* fire; dead code.
+- **"Share found" celebration** — unreachable target ⇒ it would *never* fire; dead code.
 - **CPU-speed auto-detect / H-per-MHz readout** — TWGS/ZipGS/AppleSqueezer/emulator-turbo matrix
   makes a reliable reading more trouble than it's worth.
 - **Best-bits leaderboard** — realistic user count too small to matter.

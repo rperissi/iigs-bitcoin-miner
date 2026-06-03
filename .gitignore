@@ -24,9 +24,9 @@
 !/IIgs_SHR_UI_PLAYBOOK.md
 
 # 3) re-include source directories (contents follow; artifacts pruned below)
+#    (sound/ is intentionally NOT published — audio is out of scope for now)
 !/miner/
 !/viz/
-!/sound/
 !/65816-crypto/
 !/branding/
 
