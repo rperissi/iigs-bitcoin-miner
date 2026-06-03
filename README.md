@@ -300,6 +300,18 @@ This is a hobby / demonstration project. It does not provide financial advice. Y
 
 ---
 
+## Donations (for the bit)
+
+Since the on-board miner is on track to find a block in roughly **860 trillion years**, here's a slightly faster way to put Bitcoin on a IIgs:
+
+```
+3CfSNGtkdpGMyKWx57Vr93MdHyP2UQgKao
+```
+
+Yes — that's the same wallet baked in as the app's default, so the dashboard you see is mining straight into the tip jar. No pressure: at current hashrate, donating one satoshi out-earns the miner by approximately *all of recorded time*. If this project made you smile or saved you a weekend of ORCA wrangling, a few sats are appreciated. If not, the GS will keep grinding away — see you in 860 trillion years. 🪙
+
+---
+
 ## Further reading
 
 The full narrative write-up (background, architecture, milestones, revs, war stories): [`WRITEUP.md`](WRITEUP.md)
