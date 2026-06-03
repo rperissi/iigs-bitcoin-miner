@@ -107,7 +107,8 @@ viz/font5x8.py
 65816-crypto/sha256test
 65816-crypto/sha256test_b
 
-# branding/ : publish only the two app screenshots
+# branding/ : publish only the app screenshots + the hardware photo
 branding/*
 !branding/gsminer_v095_dashboard.png
 !branding/gsminer_v095_config.png
+!branding/gsminer_v095_hardware_twgs.png

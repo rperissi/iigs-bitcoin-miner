@@ -4,8 +4,9 @@
 revisions, and the war stories.*
 
 > **Status:** beta — **`GSMINE95` / V0.95** (2026-06-03). **🏆 First confirmed LIVE mining on
-> real Apple IIgs hardware** — a 14 MHz TWGS with an Uthernet II (slot 2) on `solo.ckpool.org`
-> (~21 H/s; ~9–10 H/s on a stock 2.8 MHz GS). Mining core + Marinetti networking + a custom SHR
+> real Apple IIgs hardware** — a modded ROM 3 “Dark” IIgs (TransWarp GS @ 14 MHz, Uthernet II in
+> slot 2, CFFA, 8 MB, VidHD) on `solo.ckpool.org`. **Measured ~21–22 H/s on the 14 MHz TWGS;
+> ~9–10 H/s on a stock 2.8 MHz GS — measured, not estimated.** Mining core + Marinetti networking + a custom SHR
 > dashboard proven end-to-end. The shippable disk is a 2IMG-wrapped, CFFA-mountable `GSMINER` volume.
 >
 > This document is the **narrative write-up** for the repo. The exhaustive lab notebook

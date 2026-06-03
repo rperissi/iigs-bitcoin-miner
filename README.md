@@ -8,7 +8,11 @@ Inspired by Charles Mangin’s Apple IIe [**8BITCOIN**](https://retroconnector.c
 
 ![GS Miner CONFIG page — pool, wallet, and DEMO/LIVE toggle](branding/gsminer_v095_config.png)
 
-> **Beta — `GSMINE95` (V0.95), 2026-06-03 — gold master.** 🏆 First confirmed LIVE mining on real Apple IIgs hardware (14 MHz TWGS + Uthernet II on `solo.ckpool.org`). Shippable 2IMG / CFFA-mountable `GSMINER` disk, long soaks stable (~9–10 H/s stock 2.8 MHz, ~21 H/s on the 14 MHz GS). Full source, build scripts, and docs are in this repo; the release disk runs now.
+![GS Miner mining live at 22 H/s on real Apple IIgs hardware](branding/gsminer_v095_hardware_twgs.png)
+
+*Live on real iron: **22 H/s** on a modded ROM 3 “Dark” Apple IIgs — TransWarp GS (clocked to 14 MHz), Uthernet II, CFFA, 8 MB RAM, VidHD — mining `solo.ckpool.org`. The 22 H/s above is **measured, not estimated**.*
+
+> **Beta — `GSMINE95` (V0.95), 2026-06-03 — gold master.** 🏆 First confirmed LIVE mining on real Apple IIgs hardware. Shippable 2IMG / CFFA-mountable `GSMINER` disk, long soaks stable. **Measured ~9–10 H/s on a stock 2.8 MHz GS; 22 H/s on a 14 MHz TransWarp GS** (modded ROM 3 rig: TWGS + Uthernet II + CFFA + 8 MB + VidHD, on `solo.ckpool.org`). Full source, build scripts, and docs are in this repo; the release disk runs now.
 >
 > **Done:** user README, submit-filtering docs, Finder icon, `SYSFILES/` layout, live NET DIFF/BLOCK/JOBS, **in-app gold GS / red MINER logo** (rendered at runtime into the SHR logo well with a dynamic version stamp), portable app-relative paths, 2IMG/CFFA gold-master `GSMINER` disk, **first live mining on real hardware**. **Next:** announcement post.
 
