@@ -31,11 +31,14 @@
 !/branding/
 
 # 4) re-include ONLY the miner build/release helper scripts ----------------
-!/make_master.sh
-!/inject_gsminer.sh
-!/wrap_2mg.py
-!/mock_pool.py
-!/dump_minerlog.sh
+#    (scripts/ also holds unrelated reference-mirror fetchers — keep those OUT)
+!/scripts/
+scripts/*
+!/scripts/make_master.sh
+!/scripts/inject_gsminer.sh
+!/scripts/wrap_2mg.py
+!/scripts/mock_pool.py
+!/scripts/dump_minerlog.sh
 
 # =============================================================================
 # prune artifacts inside the re-included directories

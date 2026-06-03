@@ -6,18 +6,18 @@
 # CR line endings to newlines so they read cleanly, and prints them (current first). Quit Ample
 # / eject the disk first so the image isn't locked.
 #
-# Usage:
-#   ./dump_minerlog.sh                      # default image (apps.2mg)
-#   ./dump_minerlog.sh -s                    # also save copies under ./logs/ with a timestamp
-#   ./dump_minerlog.sh path/to/disk.2mg      # pull from a specific image (e.g. gsminer_v0.95.2mg)
-#   ./dump_minerlog.sh -s path/to/disk.2mg
+# Usage (run from the repo root):
+#   scripts/dump_minerlog.sh                      # default image (apps.2mg in the repo root)
+#   scripts/dump_minerlog.sh -s                    # also save copies under ./logs/ with a timestamp
+#   scripts/dump_minerlog.sh path/to/disk.2mg      # pull from a specific image (e.g. gsminer_v0.95.2mg)
+#   scripts/dump_minerlog.sh -s path/to/disk.2mg
 #
 # Manual equivalent (single file):
 #   java -jar AppleCommander.jar -g <image>.2mg SYSFILES/MINER.LOG | tr '\r' '\n'
 set -euo pipefail
 
 JAVA=/opt/homebrew/opt/openjdk/bin/java
-HERE="$(cd "$(dirname "$0")" && pwd)"
+HERE="$(cd "$(dirname "$0")/.." && pwd)"   # repo root (this script lives in scripts/)
 AC="$HERE/AppleCommander.jar"
 
 SAVE=0

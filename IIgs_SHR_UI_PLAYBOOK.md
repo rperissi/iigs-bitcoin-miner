@@ -361,7 +361,7 @@ it dictates the whole palette strategy.
 
 Build/inject (both chassis + binary): build `frame.shr` **and** `config.shr`, then
 `occ -O255 -w255 viz.c -L. -llib65816hash -o viz ; iix chtyp -t s16 viz`, then
-`./inject_gsminer.sh -f` — it reads `APPVER` from `viz.c`, injects as `GSMINE<NN>`
+`scripts/inject_gsminer.sh -f` — it reads `APPVER` from `viz.c`, injects as `GSMINE<NN>`
 (S16), and refreshes `PANEL` (`frame.shr`) + `CONFIG` (`config.shr`). Keeps current
 + previous rev; `-f` allows injecting while Ample runs (eject/re-insert to see it).
 

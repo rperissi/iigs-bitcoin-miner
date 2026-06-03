@@ -17,14 +17,16 @@
 # gsminer_v0<rev>.2mg, which also mounts on real CFFA3000 hardware (a bare .2mg without
 # the 2IMG header is rejected as "invalid image").
 #
-# Usage:  ./make_master.sh            # rev from #define APPVER in miner/viz.c
-#         ./make_master.sh 89         # explicit rev
+# Usage (run from the repo root):
+#         scripts/make_master.sh      # rev from #define APPVER in miner/viz.c
+#         scripts/make_master.sh 89   # explicit rev
 # Then (with Ample's apps.2mg ejected):  cp apps_master.2mg apps.2mg
 # Ship:   gsminer_v0<rev>.2mg  (CFFA-ready; hand this to users / attach to the release)
 set -euo pipefail
 
 JAVA=/opt/homebrew/opt/openjdk/bin/java
-HERE="$(cd "$(dirname "$0")" && pwd)"
+SELF="$(cd "$(dirname "$0")" && pwd)"    # this script's dir (scripts/)
+HERE="$(cd "$SELF/.." && pwd)"           # repo root (apps.2mg, miner/, viz/, AppleCommander.jar live here)
 AC="$HERE/AppleCommander.jar"
 SRC="$HERE/miner/viz"
 ICON="$HERE/viz/gsminer.icons"
@@ -80,9 +82,9 @@ echo "--- ${OUT##*/} contents ---"
 # Wrap a copy in a real 2IMG header for distribution / real CFFA hardware. The raw
 # apps_master.2mg stays headerless for the AppleCommander + Ample dev loop.
 SHIP="$HERE/gsminer_v0.$((10#$REV)).2mg"      # e.g. rev 94 -> gsminer_v0.94.2mg
-if [ -f "$HERE/wrap_2mg.py" ]; then
+if [ -f "$SELF/wrap_2mg.py" ]; then
   echo "--- wrapping shippable 2IMG (CFFA-ready) ---"
-  python3 "$HERE/wrap_2mg.py" "$OUT" "$SHIP"
+  python3 "$SELF/wrap_2mg.py" "$OUT" "$SHIP"
 fi
 echo
 echo "OK. Dev:  with Ample's floppy ejected,  cp '$OUT' '$HERE/apps.2mg'  then reboot."

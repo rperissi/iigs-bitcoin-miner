@@ -4,10 +4,10 @@
 # Keeps TWO versions on the floppy: current rev + previous rev.
 # Purges rev-2 and legacy names (GSMINER2, VIZ, …).
 #
-# Usage:
-#   ./inject_gsminer.sh           # rev from #define APPVER "V0.N" in miner/viz.c
-#   ./inject_gsminer.sh 04        # explicit rev
-#   ./inject_gsminer.sh -f 04     # allow while Ample runs (eject disk first!)
+# Usage (run from the repo root):
+#   scripts/inject_gsminer.sh           # rev from #define APPVER "V0.N" in miner/viz.c
+#   scripts/inject_gsminer.sh 04        # explicit rev
+#   scripts/inject_gsminer.sh -f 04     # allow while Ample runs (eject disk first!)
 #
 # Tip: EJECT the floppy in Ample before injecting, then RE-INSERT after.
 set -euo pipefail
@@ -16,7 +16,7 @@ FORCE=0
 if [ "${1:-}" = "-f" ]; then FORCE=1; shift; fi
 
 JAVA=/opt/homebrew/opt/openjdk/bin/java
-HERE="$(cd "$(dirname "$0")" && pwd)"
+HERE="$(cd "$(dirname "$0")/.." && pwd)"   # repo root (this script lives in scripts/)
 AC="$HERE/AppleCommander.jar"
 IMG="$HERE/apps.2mg"
 SRC="$HERE/miner/viz"

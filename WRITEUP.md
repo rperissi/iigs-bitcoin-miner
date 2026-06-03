@@ -87,7 +87,7 @@ the pool with shares it knows will be rejected.
 - On a **public pool**, `strat_need_bits()` is derived from the pool's `mining.set_difficulty`
   (diff ≥ 1 → ≥ **32 bits**; ckpool soaks observed ~**45 bits**). At ~10 H/s that target is
   unreachable in practice, so SHARES stays `0 / 0`.
-- On a **private/LAN IP** (the `mock_pool.py` dev path) the target is overridden to an easy
+- On a **private/LAN IP** (the `scripts/mock_pool.py` dev path) the target is overridden to an easy
   **8 bits**, so you can watch the full submit → **ACCEPT** handshake end-to-end.
 
 There is **no** `if (public_pool) never_submit`. A hash that clears the bar always submits —
@@ -162,7 +162,7 @@ shifter and no 32-bit ALU, that's the hot path.
   and, per nonce, do **1 compression for block 1** + the second SHA of the double-hash →
   **~2 compressions/nonce** instead of 3. Measured ~5–6 → ~8 H/s in Ample.
 - **Validation:** `minecore.c` reproduces the Python oracle **byte-for-byte** — merkle root,
-  found nonce `0x1a`, and hash `005b58e4…597cc4` all match `mock_pool.py`'s self-test.
+  found nonce `0x1a`, and hash `005b58e4…597cc4` all match `scripts/mock_pool.py`'s self-test.
 
 The marquee bug here (all-zero hashes) is in §12 — it's a great GS gotcha.
 
@@ -226,7 +226,7 @@ We build **natively on a Mac** and produce a **real IIGS binary** that runs in A
   iix chtyp -t s16 viz
   ```
 
-- **Inject** onto the ProDOS disk image with **AppleCommander** (`inject_gsminer.sh`): the app
+- **Inject** onto the ProDOS disk image with **AppleCommander** (`scripts/inject_gsminer.sh`): the app
   goes to `/GSMINER/GSMINE<rev>`, data plates + icon to `SYSFILES/` and `Icons/`.
 - **Run** in **Ample** (MAME-based GS emulator) with Marinetti + Uthernet II configured, or on
   real iron.
@@ -262,7 +262,7 @@ Full prose for every milestone (with dates and code pointers) is in POC §11 + �
 
 ## 11. Revision history
 
-The rev lives in `#define APPVER "V0.N"` in `miner/viz.c`; `inject_gsminer.sh` injects it as
+The rev lives in `#define APPVER "V0.N"` in `miner/viz.c`; `scripts/inject_gsminer.sh` injects it as
 `GSMINE<NN>` and keeps the previous rev on the disk as a rollback. Key checkpoints are frozen
 under [`baseline/`](baseline/):
 
@@ -365,14 +365,14 @@ occ -b -O255 -w255 viz.c mine.c numfmt.c stratum.c cfg.c mlog.c -L. -llib65816ha
 iix chtyp -t s16 viz
 
 # 3. inject onto the disk image (reads APPVER for the rev)
-cd .. && ./inject_gsminer.sh
+cd .. && scripts/inject_gsminer.sh
 
 # 4. run GSMINE<rev> in Ample, or build a clean release disk:
-./make_master.sh
+scripts/make_master.sh
 ```
 
-**Test without a pool:** run `mock_pool.py` on the Mac, point CONFIG at its LAN IP (8-bit easy
-target), and watch the full submit → ACCEPT path. Pull logs off the disk with `dump_minerlog.sh`.
+**Test without a pool:** run `scripts/mock_pool.py` on the Mac, point CONFIG at its LAN IP (8-bit easy
+target), and watch the full submit → ACCEPT path. Pull logs off the disk with `scripts/dump_minerlog.sh`.
 
 ---
 
@@ -387,8 +387,8 @@ target), and watch the full submit → ACCEPT path. Pull logs off the disk with 
 | `miner/logo_gs.h` | generated logo bitmap (palette indices) |
 | `viz/build_frame.py`, `spec.py`, `frame2shr_contract.py` | procedural chrome → `frame.shr` |
 | `viz/logo_depth_proof.py`, `font4x6.py`, `font5x7.py` | logo proof + emitter, fonts |
-| `mock_pool.py`, `echo_pool.py` | Mac-side dev Stratum/echo servers |
-| `inject_gsminer.sh`, `make_master.sh`, `dump_minerlog.sh` | disk inject / release / log tools |
+| `scripts/mock_pool.py` | Mac-side dev Stratum pool / correctness oracle |
+| `scripts/inject_gsminer.sh`, `make_master.sh`, `wrap_2mg.py`, `dump_minerlog.sh` | disk inject / release / 2IMG wrap / log tools |
 | `branding/` | logo proofs + final dashboard captures |
 | `baseline/` | frozen rev checkpoints (see §11) |
 | `IIGS_BITCOIN_MINER_POC.md` | the exhaustive lab notebook |
@@ -425,7 +425,7 @@ compressions. So:
 - The obvious C-side cleanups (specialising the second hash instead of routing it through the
   generic `init`/`update`/`finalize`, killing a redundant byte-swap, not re-zeroing the block
   each nonce) are **< 1%** — code hygiene, not speed, and they'd disturb the one path that's
-  *proven bit-identical* to the reference by `miner/mstest.c` + `mock_pool.py`. Not worth the risk.
+  *proven bit-identical* to the reference by `miner/mstest.c` + `scripts/mock_pool.py`. Not worth the risk.
 - A full **nonce-specialised double-SHA in asm** — precompute block-1's midstate *past round 2*
   (the nonce is `W3`, so rounds 0–2 and schedule words `W0–W17` are job-constant), fold `K+W` on
   the ~23 constant-`W` rounds, early-out on the final word — is real cowboy work but lands at
@@ -461,7 +461,7 @@ V0.95 core** — it ships as-is.
 
 ### Ship items
 
-- **Gold-master release** — `make_master.sh` clean `.2mg` (CFFA-ready, `GSMINER` volume) on GitHub
+- **Gold-master release** — `scripts/make_master.sh` clean `.2mg` (CFFA-ready, `GSMINER` volume) on GitHub
   Releases + LICENSE.
 - **M-accel** — measured hashrate on accelerated hardware/emulation, replacing the "turbo GS"
   asterisk with a real multiplier.

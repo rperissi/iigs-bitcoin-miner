@@ -61,8 +61,8 @@ GS Miner is a **complete, full-stack application**, not a tech demo. It boots, c
 | Asset | Description |
 |-------|-------------|
 | **[Latest release disk](releases/)** | ProDOS `2MG` image — mount or write to media, boot GS/OS, open `/GSMINER/GSMINE95` (rev may vary) |
-| **`mock_pool.py`** | Mac-side Stratum pool for LAN testing (optional) |
-| **`dump_minerlog.sh`** | Pull diagnostic logs off the disk image (host Mac, requires Java + AppleCommander) |
+| **`scripts/mock_pool.py`** | Mac-side Stratum pool for LAN testing (optional) |
+| **`scripts/dump_minerlog.sh`** | Pull diagnostic logs off the disk image (host Mac, requires Java + AppleCommander) |
 
 ---
 
@@ -161,7 +161,7 @@ If we submitted every hash with a few zero bytes (the 8BITCOIN-style celebration
 - At ~10 H/s you could still flood the pool with **useless traffic** (JSON + verification load).
 - Many pools **rate-limit, disconnect, or ban** misbehaving workers.
 
-We filter out shares **we know will fail** rather than spam rejects. For a demo where you want **`ACCEPT`** quickly, use **`mock_pool.py`** on your LAN.
+We filter out shares **we know will fail** rather than spam rejects. For a demo where you want **`ACCEPT`** quickly, use **`scripts/mock_pool.py`** on your LAN.
 
 **Bottom line:** LIVE mode is real Stratum mining. The submit gate is **pool-target filtering**, not “fake mining.” BLOCK ETA still uses **network** difficulty (the quadrillion-year lottery Mangin wrote about).
 
@@ -188,12 +188,12 @@ Settings persist to `/GSMINER/SYSFILES/MINER.CONF`.
 For development and “show me an accepted share” demos on your Mac:
 
 ```bash
-python3 mock_pool.py
+python3 scripts/mock_pool.py
 ```
 
 Point the GS CONFIG at your Mac’s LAN IP (often `192.168.x.1` on Ample vmnet) port **3333**. The mock pool speaks real Stratum v1 and **re-verifies every share in Python** — it doubles as a correctness oracle for the GS hashing path.
 
-See the header comment in `mock_pool.py` for the 80-byte block header layout the GS must build.
+See the header comment in `scripts/mock_pool.py` for the 80-byte block header layout the GS must build.
 
 ---
 
@@ -223,9 +223,9 @@ GS Miner keeps an **on-disk diagnostic trail** so connection quirks can be diagn
 From a **disk image** on the host (quit Ample / eject the disk first so the image isn’t locked):
 
 ```bash
-./dump_minerlog.sh                      # print MINER.LOG then MINER.OLD (CR→LF cleaned)
-./dump_minerlog.sh -s                   # also save copies under ./logs/ with a timestamp
-./dump_minerlog.sh gsminer_v0.95.2mg    # point at a specific image (e.g. one pulled off CFFA)
+scripts/dump_minerlog.sh                      # print MINER.LOG then MINER.OLD (CR→LF cleaned)
+scripts/dump_minerlog.sh -s                   # also save copies under ./logs/ with a timestamp
+scripts/dump_minerlog.sh gsminer_v0.95.2mg    # point at a specific image (e.g. one pulled off CFFA)
 ```
 
 Under the hood it’s just AppleCommander; the manual equivalent for a single file is:
@@ -236,7 +236,7 @@ java -jar AppleCommander.jar -g <image>.2mg SYSFILES/MINER.LOG | tr '\r' '\n'
 
 From the **real volume** (CFFA / SD / floppy): the logs are ordinary ProDOS `TXT` files at `/GSMINER/SYSFILES/MINER.LOG` (and `.OLD`). Copy them off with any ProDOS/GS-OS file tool (the Finder, Copy II Plus, `cp` under GNO, etc.) or read them on the GS directly — no special tooling required.
 
-> `dump_minerlog.sh` requires `AppleCommander.jar` in the repo root (bring your own if it isn’t redistributed) and a Java runtime.
+> `scripts/dump_minerlog.sh` requires `AppleCommander.jar` in the repo root (bring your own if it isn’t redistributed) and a Java runtime.
 
 ---
 
@@ -256,7 +256,7 @@ Full architecture notes are in [`WRITEUP.md`](WRITEUP.md) and [`IIGS_BITCOIN_MIN
 
 ## Building from source
 
-The full source is in this repo: `miner/` sources, patched `65816-crypto/`, and build scripts (`inject_gsminer.sh`, `make_master.sh`).
+The full source is in this repo: `miner/` sources, patched `65816-crypto/`, and build scripts (`scripts/inject_gsminer.sh`, `scripts/make_master.sh`).
 
 **Not required to run the release disk** — only if you want to compile from source on a Mac.
 
