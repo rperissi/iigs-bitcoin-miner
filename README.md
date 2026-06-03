@@ -290,7 +290,11 @@ GS Miner is built with **ORCA/C** (large memory model, `occ -b`), linking **ORCA
 
 - **AppleCommander** — disk image inject and log extraction on the Mac (not bundled in this repo)
 
-Implementation driven and tested on real/emulated hardware; modern coding assistants used heavily for development. Issues and optimizations welcome.
+### Built with
+
+- **[Cursor](https://cursor.com/)** on a Mac, driven with recent frontier models — the app, build pipeline, and docs were developed end-to-end in Cursor, then compiled and tested on real and emulated IIgs hardware.
+
+Issues and optimizations welcome.
 
 ---
 
@@ -300,7 +304,7 @@ This is a hobby / demonstration project. It does not provide financial advice. Y
 
 ---
 
-## Donations (for the bit)
+## Donations
 
 Since the on-board miner is on track to find a block in roughly **860 trillion years**, here's a slightly faster way to put Bitcoin on a IIgs:
 
