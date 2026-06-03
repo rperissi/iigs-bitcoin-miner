@@ -1,0 +1,10 @@
+# Normalize line endings for text; mark known binaries so GitHub diffs sanely.
+* text=auto eol=lf
+
+*.png  binary
+*.jpg  binary
+*.shr  binary
+*.mod  binary
+*.2mg  binary
+*.po   binary
+*.B    binary

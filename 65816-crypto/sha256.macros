@@ -1,0 +1,464 @@
+* Copyright (c) 2017 Stephen Heumann
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
+* copyright notice and this permission notice appear in all copies.
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+* ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+* WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+* ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+* OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+
+* Right-rotate 32-bit value in &loc (DP or 16-bit address) by &n positions
+	macro
+	ROTR4	&loc,&n
+	aif	&n>16,.dorotl
+	lda	&loc+2
+	lcla	&i
+&i	seta	&n
+.rotrloop
+	lsr	a		;to set carry
+	ror     &loc
+	ror     &loc+2
+&i	seta	&i-1
+	aif	&i>0,.rotrloop
+	ago	.end
+.dorotl
+	ROTL4	&loc,32-&n
+.end
+	mend
+
+* Expects the contents of &loc+2 to be loaded in A already
+	macro
+	ROTR4CONT &loc,&n
+	aif	&n>16,.dorotl
+	lcla	&i
+&i	seta	&n
+.rotrloop
+	lsr	a		;to set carry
+	ror     &loc
+	ror     &loc+2
+&i	seta	&i-1
+	aif	&i>0,.rotrloop
+	ago	.end
+.dorotl
+	ROTL4	&loc,32-&n
+.end
+	mend
+
+* Left-rotate 32-bit value in &loc (DP or 16-bit address) by &n positions
+	macro
+	ROTL4	&loc,&n
+	aif	&n>16,.dorotr2
+        lda     &loc
+	lcla	&i
+&i	seta	&n
+.rotlloop2
+        asl     a		;to set carry
+        rol     &loc+2
+        rol     &loc
+&i	seta	&i-1
+	aif	&i>0,.rotlloop2
+	ago	.end2
+.dorotr2
+	ROTR4	&loc,32-&n
+.end2
+	mend
+
+* Expects the contents of &loc to be loaded in A already
+	macro
+	ROTL4CONT &loc,&n
+	aif	&n>16,.dorotr2
+	lcla	&i
+&i	seta	&n
+.rotlloop2
+        asl     a		;to set carry
+        rol     &loc+2
+        rol     &loc
+&i	seta	&i-1
+	aif	&i>0,.rotlloop2
+	ago	.end2
+.dorotr2
+	ROTR4	&loc,32-&n
+.end2
+	mend
+
+* &to := &from ROTR4 &n
+	macro
+	ROTR4MOVE &to,&from,&n
+	aif	&n>16,.dorotl3
+        lda     &from
+        sta     &to
+        lda     &from+2
+        sta     &to+2
+	lcla	&i
+&i	seta	&n
+.rotrloop3
+	lsr	a		;to set carry
+	ror     &to
+	ror     &to+2
+&i	seta	&i-1
+	aif	&i>0,.rotrloop3
+	ago	.end3
+.dorotl3
+	ROTL4MOVE &to,&from,32-&n
+.end3
+	mend
+
+* &to := &from ROTL4 &n
+	macro
+	ROTL4MOVE &to,&from,&n
+	aif	&n>16,.dorotr4
+        lda     &from+2
+        sta     &to+2
+        lda     &from
+        sta     &to
+	lcla	&i
+&i	seta	&n
+.rotlloop4
+        asl     a		;to set carry
+        rol     &to+2
+        rol     &to
+&i	seta	&i-1
+	aif	&i>0,.rotlloop4
+	ago	.end4
+.dorotr4
+	ROTR4MOVE &to,&from,32-&n
+.end4
+	mend
+
+
+* This makes a function wrapper that is callable from C,
+* taking a pointer to the context structure as its argument.
+	macro
+	CFunction &fn
+	phb
+	plx
+	ply
+	tdc
+	pld
+	plb
+	plb
+	phy
+	phx
+	plb
+	pha
+	jsl	&fn
+	pld
+	rtl
+	mend
+
+
+* Macros to operate on elements of the message schedule (W)
+	macro
+&lab	lda_w	&i,&inc
+	lcla	&j
+&j	seta	&i
+.modloop1
+	aif	&j<16,.goodidx1
+&j	seta	&j-16
+	ago	.modloop1
+.goodidx1
+	aif	C:&inc<>0,.haveinc1
+	lcla	&inc
+.haveinc1
+&lab	lda	w+(&j)*4+&inc
+	mend
+
+	macro
+&lab	sta_w	&i,&inc
+	lcla	&j
+&j	seta	&i
+.modloop3
+	aif	&j<16,.goodidx3
+&j	seta	&j-16
+	ago	.modloop3
+.goodidx3
+	aif	C:&inc<>0,.haveinc3
+	lcla	&inc
+.haveinc3
+&lab	sta	w+(&j)*4+&inc
+	mend
+
+	macro
+&lab	adc_w	&i,&inc
+	lcla	&j
+&j	seta	&i
+.modloop4
+	aif	&j<16,.goodidx4
+&j	seta	&j-16
+	ago	.modloop4
+.goodidx4
+	aif	C:&inc<>0,.haveinc4
+	lcla	&inc
+.haveinc4
+&lab	adc	w+(&j)*4+&inc
+	mend
+
+
+* Compute one part of the message schedule (16 elements)
+	macro
+	ComputeSchedule &part
+	lcla	&i
+
+; Flip the endianness of W_0 to W_15 (the current block of the message)
+	aif	&part<>1,.skippart1
+.loop1
+	lda	w+&i*4
+	xba
+	ldx	w+&i*4+2
+	sta	w+&i*4+2
+	txa
+	xba
+	sta	w+&i*4
+&i	seta	&i+1
+	aif	&i<16,.loop1
+	ago	.end
+.skippart1
+
+; compute the rest of the message schedule (W_16 to W_63)
+&i	seta	(&part-1)*16
+.loop2
+; sigma_0 + w[i-16] computation
+	lda_w	&i-15,-1
+	and	#$FF00
+	sta	temp1+2
+	lda_w	&i-15,3
+	and	#$00FF
+	ora	temp1+2
+	sta	temp1+2
+	lda_w	&i-15,1
+	sta	temp1
+	ROTL4CONT temp1,1
+	lda_w	&i-15,2
+	sta	temp2
+	lda_w	&i-15
+	sta	temp2+2
+	ROTR4CONT temp2,2
+	lda_w	&i-15,2
+	lsr	a
+	sta	temp3+2
+	lda_w	&i-15
+	ror	a
+	sta	temp3
+	lsr	temp3+2
+	ror	temp3
+	lsr	temp3+2
+	lda	temp3
+	ror	a
+	eor	temp2
+	eor	temp1
+	clc
+	adc_w	&i-16
+	sta	temp1
+	lda	temp3+2
+	eor	temp2+2
+	eor	temp1+2
+	adc_w	&i-16,2
+	sta	temp1+2
+	
+; sigma_1 + w[i-7] computation
+	lda_w	&i-2,2
+	sta	temp2
+	lda_w	&i-2
+	sta	temp2+2
+	ROTR4CONT temp2,1
+	ROTR4MOVE temp3,temp2,2
+	lda_w	&i-2,3
+	and	#$00FF
+	lsr	a
+	tax
+	lda_w	&i-2,1
+	ror	a
+	tay
+	txa
+	lsr	a
+	tax
+	tya
+	ror	a
+	eor	temp3
+	eor	temp2
+	clc
+	adc_w	&i-7
+	tay
+	txa
+	eor	temp3+2
+	eor	temp2+2
+	adc_w	&i-7,2
+	tax
+	
+	clc
+	tya
+	adc	temp1
+	sta_w	&i
+	txa
+	adc	temp1+2
+	sta_w	&i,2
+	
+&i	seta	&i+1
+	aif	&i<&part*16,.loop2
+.end
+	mend
+
+
+
+* One iteration of the loop for processing blocks.
+* The a,b,c,d,e,f,g,h variables are given as parameters so we can avoid
+* cycling them.
+	macro
+	BlockLoopIter &a,&b,&c,&d,&e,&f,&g,&h,&iter,&k_idx1,&k_idx2
+	
+; Sigma_1+w[i] computation
+	lda	&e+1
+	sta	temp1
+	sta	temp2
+	lda	&e-1
+	ora	&e+3
+	sta	temp1+2
+	sta	temp2+2
+	ROTR4CONT temp2,3
+	ROTL4	temp1,2
+	lda	&e-1
+	ora	&e+3
+	sta	temp3
+	lda	&e+1
+	sta	temp3+2
+	ROTR4CONT temp3,1
+	lda	temp1
+	eor	temp2
+	eor	temp3
+	clc
+	ldx	idx
+	adc	w+&iter*4,x
+	sta	temp1
+	lda	temp1+2
+	eor	temp2+2
+	eor	temp3+2
+	adc	w+&iter*4+2,x
+	sta	temp1+2
+
+; ch+Sigma_1+W[i] computation
+	lda	&f
+	eor	&g
+	and	&e
+	eor	&g
+	clc
+	adc	temp1
+	sta	temp2
+	lda	&f+2
+	eor	&g+2
+	and	&e+2
+	eor	&g+2
+	adc	temp1+2
+	sta	temp2+2
+	
+; T_1 computation
+	clc
+	lda	&h
+	adc	temp2
+	tay
+	lda	&h+2
+	adc	temp2+2
+	tax
+	clc
+	tya
+	ldy	k_ptr
+	adc	(&k_idx1),y
+	sta	temp1
+	txa
+	adc	(&k_idx2),y
+	sta	temp1+2
+	tax
+	
+	clc
+	lda	temp1
+	adc	&d
+	sta	&d
+	txa
+	adc	&d+2
+	sta	&d+2
+	
+;Sigma_0+T_1 computation
+	ROTR4MOVE temp2,&a,2
+	lda	&a
+	sta	temp3+2
+	lda	&a+2
+	sta	temp3
+	ROTL4CONT temp3,3
+	lda	&a+1
+	sta	temp4+2
+	lda	&a-1
+	ora	&a+3
+	sta	temp4
+	ROTL4CONT temp4,2
+	lda	temp2
+	eor	temp3
+	eor	temp4
+	clc
+	adc	temp1
+	sta	temp2
+	lda	temp2+2
+	eor	temp3+2
+	eor	temp4+2
+	adc	temp1+2
+	sta	temp2+2
+
+;maj and T_2 computation (saved to &h)
+	lda	&a
+	ora	&b
+	and	&c
+	sta	temp3
+	lda	&a
+	and	&b
+	ora	temp3
+	clc
+	adc	temp2
+	sta	&h
+	lda	&a+2
+	ora	&b+2
+	and	&c+2
+	sta	temp3+2
+	lda	&a+2
+	and	&b+2
+	ora	temp3+2
+	adc	temp2+2
+	sta	&h+2
+	
+	mend
+
+
+* One part of the loop for processing blocks (16 iterations)
+	macro
+	BlockLoopPart &part
+
+	stz	idx
+loop&part anop
+	
+	BlockLoopIter a_,b,c,d,e,f,g,h,0,zero,two
+	BlockLoopIter h,a_,b,c,d,e,f,g,1,four,six
+	BlockLoopIter g,h,a_,b,c,d,e,f,2,eight,ten
+	BlockLoopIter f,g,h,a_,b,c,d,e,3,twelve,fourteen
+	BlockLoopIter e,f,g,h,a_,b,c,d,4,sixteen,eighteen
+	BlockLoopIter d,e,f,g,h,a_,b,c,5,twenty,twentytwo
+	BlockLoopIter c,d,e,f,g,h,a_,b,6,twentyfour,twentysix
+	BlockLoopIter b,c,d,e,f,g,h,a_,7,twentyeight,thirty
+
+	clc
+	lda	k_ptr
+	adc	#4*8
+	sta	k_ptr
+
+	clc
+	lda	idx
+	adc	#4*8
+	cmp	#16*4
+	bge	endloop&part
+	sta	idx
+	jmp	loop&part
+endloop&part anop
+	mend
+

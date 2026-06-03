@@ -1,0 +1,118 @@
+# =============================================================================
+# iigs-bitcoin-miner  —  PUBLISH WHITELIST
+# -----------------------------------------------------------------------------
+# This project lives inside a large mixed IIgs workspace (~2 GB: reference
+# mirror, disk images, toolchains, unrelated experiments). To make it
+# IMPOSSIBLE to accidentally publish any of that, we IGNORE EVERYTHING AT THE
+# ROOT BY DEFAULT and then explicitly re-include only the GS Miner project.
+#
+# How it works: "/*" matches only root-level entries (it is NOT recursive), so
+# re-including a directory with "!/dir/" pulls in all of its contents. We then
+# re-ignore build artifacts within those directories further down.
+# =============================================================================
+
+# 1) ignore every root-level entry by default ------------------------------
+/*
+
+# 2) re-include project metadata + the public docs -------------------------
+!/.gitignore
+!/.gitattributes
+!/LICENSE
+!/README.md
+!/WRITEUP.md
+!/IIGS_BITCOIN_MINER_POC.md
+!/IIgs_SHR_UI_PLAYBOOK.md
+
+# 3) re-include source directories (contents follow; artifacts pruned below)
+!/miner/
+!/viz/
+!/sound/
+!/65816-crypto/
+!/branding/
+
+# 4) re-include ONLY the miner build/release helper scripts ----------------
+!/make_master.sh
+!/inject_gsminer.sh
+!/wrap_2mg.py
+!/mock_pool.py
+
+# =============================================================================
+# prune artifacts inside the re-included directories
+# =============================================================================
+
+# OS / editor cruft
+**/.DS_Store
+**/__pycache__/
+
+# miner/ : ship the shipped-app sources + headers only.
+# The app = occ -b viz.c mine.c numfmt.c stratum.c cfg.c mlog.c paths.c -llib65816hash
+# Everything below is a standalone test/old CLI harness — not part of the app:
+miner/bench.c
+miner/brtest.c
+miner/echo.c
+miner/hello.cc
+miner/livetest.c
+miner/logtest.c
+miner/minecore.c
+miner/miner.c
+miner/mstest.c
+miner/shr1.c
+miner/xmodtest.c
+# drop ORCA build artifacts + compiled binaries
+miner/*.a
+miner/*.root
+miner/*.sym
+miner/*.bak
+miner/*.orig
+miner/bench
+miner/echo
+miner/hello
+miner/livetest
+miner/miner
+miner/minecore
+miner/mstest
+miner/shr1
+miner/viz
+miner/viz_test
+miner/lib65816hash
+miner/lib65816hash.buggy.bak
+miner/lib65816hashb
+
+# viz/ : ship Python generators only — drop generated images / shr / caches
+viz/*.png
+viz/*.jpg
+viz/*.shr
+viz/*.icons
+viz/icons/
+# dropped FTA visual-overhaul scratch (see chat: parked, app ships as-is)
+viz/mockup_fta.py
+viz/mockup_fta_v2.py
+viz/render_panel_pushed.py
+# experiment / proof scripts + spare fonts (not part of the asset pipeline)
+viz/render_lc.py
+viz/render_lc2.py
+viz/render_lc3.py
+viz/render_640.py
+viz/render_proof.py
+viz/detect_wells.py
+viz/font_compare.py
+viz/font3x5.py
+viz/font4x7.py
+viz/font5x7w.py
+viz/font5x8.py
+
+# 65816-crypto/ : ship source + LICENSE — drop compiled artifacts/binaries
+65816-crypto/*.a
+65816-crypto/*.root
+65816-crypto/lib65816hash
+65816-crypto/lib65816hash_b
+65816-crypto/sha256sum
+65816-crypto/sha256test
+65816-crypto/sha256test_b
+
+# branding/ : drop internal scratch / external reference edits / dropped mockups
+branding/fta_mockup_*
+branding/reference_*
+branding/ref_*
+branding/*_compare*
+branding/*notch_edit*
