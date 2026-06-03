@@ -373,9 +373,9 @@ Build/inject (both chassis + binary): build `frame.shr` **and** `config.shr`, th
 
 ---
 
-## 11. GS Miner shipping status (2026-06-02)
+## 11. GS Miner shipping status (2026-06-03)
 
-The miner dashboard from this playbook ships as **`GSMINE94` / V0.94** (`miner/viz.c`).
+The miner dashboard from this playbook ships as **`GSMINE95` / V0.95** (`miner/viz.c`).
 
 | Area | Status |
 |------|--------|
@@ -383,7 +383,7 @@ The miner dashboard from this playbook ships as **`GSMINE94` / V0.94** (`miner/v
 | Live data + DEMO/LIVE + CONFIG persistence | ✅ |
 | Stratum LIVE (`stratum.c`) + `SYSFILES/` paths | ✅ |
 | Custom Finder icon (`viz/build_icon.py`) | ✅ |
-| In-app logo well — gold **GS** / red **MINER** + dynamic `v0.94` stamp | ✅ runtime SHR blit (`miner/logo_gs.h` + `draw_logo()`); see POC §16k |
+| In-app logo well — gold **GS** / red **MINER** + dynamic `v0.95` stamp | ✅ runtime SHR blit (`miner/logo_gs.h` + `draw_logo()`); see POC §16k |
 | User docs | ✅ `README.md`, `RELEASE_COMMS.md`, POC §16 |
 
 **Porting a proof to a runtime blit (reusable pattern):** rasterise the art to **palette indices**

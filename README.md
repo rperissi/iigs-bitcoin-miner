@@ -8,9 +8,9 @@ Inspired by Charles Mangin’s Apple IIe [**8BITCOIN**](https://retroconnector.c
 
 ![GS Miner CONFIG page — pool, wallet, and DEMO/LIVE toggle](branding/gsminer_v095_config.png)
 
-> **Beta — `GSMINE94` (V0.94), 2026-06-02.** Shippable disk, long soaks stable (~9–10 H/s stock 2.8 MHz). **Source code** posted in a few days after final doc/baseline cleanup — the release disk runs now.
+> **Beta — `GSMINE95` (V0.95), 2026-06-03 — gold master.** 🏆 First confirmed LIVE mining on real Apple IIgs hardware (14 MHz TWGS + Uthernet II on `solo.ckpool.org`). Shippable 2IMG / CFFA-mountable `GSMINER` disk, long soaks stable (~9–10 H/s stock 2.8 MHz, ~21 H/s on the 14 MHz GS). **Source code** posted in a few days after final doc/baseline cleanup — the release disk runs now.
 >
-> **Done:** user README, submit-filtering docs, Finder icon, `SYSFILES/` layout, live NET DIFF/BLOCK/JOBS, **in-app gold GS / red MINER logo** (rendered at runtime into the SHR logo well with a dynamic version stamp). **Next:** gold-master disk → GitHub + FB post.
+> **Done:** user README, submit-filtering docs, Finder icon, `SYSFILES/` layout, live NET DIFF/BLOCK/JOBS, **in-app gold GS / red MINER logo** (rendered at runtime into the SHR logo well with a dynamic version stamp), portable app-relative paths, 2IMG/CFFA gold-master `GSMINER` disk, **first live mining on real hardware**. **Next:** GitHub source drop + announcement post.
 
 📖 **Read the full story** — background, architecture deep-dives, milestone-by-milestone build, the revisions, and the war stories: **[`WRITEUP.md`](WRITEUP.md)**.
 
@@ -20,7 +20,7 @@ Inspired by Charles Mangin’s Apple IIe [**8BITCOIN**](https://retroconnector.c
 
 | Asset | Description |
 |-------|-------------|
-| **[Latest release disk](releases/)** | ProDOS `2MG` image — mount or write to media, boot GS/OS, open `/MINERAPPS/GSMINE94` (rev may vary) |
+| **[Latest release disk](releases/)** | ProDOS `2MG` image — mount or write to media, boot GS/OS, open `/GSMINER/GSMINE95` (rev may vary) |
 | **`mock_pool.py`** | Mac-side Stratum pool for LAN testing (optional) |
 | **`dump_minerlog.sh`** | Pull diagnostic logs off the disk image (host Mac, requires Java + AppleCommander) |
 
@@ -38,15 +38,15 @@ Inspired by Charles Mangin’s Apple IIe [**8BITCOIN**](https://retroconnector.c
 
 1. **Get the disk** — download the release `.2mg` from [Releases](releases/) (or GitHub Releases when published).
 2. **Mount** the image in your emulator, or inject/copy onto your boot media.
-3. **Boot GS/OS** and open **`/MINERAPPS/GSMINE94`** (or the current rev on the disk).
+3. **Boot GS/OS** and open **`/GSMINER/GSMINE95`** (or the current rev on the disk).
 4. **DEMO mode (default)** — runs immediately: full mining loop + dashboard, no network. Good if you have no TCP or just want to watch hashes and the scope.
 5. **LIVE mode** — click **CONFIG**, set MODE to `LIVE`, enter pool/worker/wallet (and optional backup pool), save, return to the panel, click **RUN**. The app connects via Marinetti, subscribes to Stratum, and hashes live jobs.
 
 ### Disk layout
 
 ```
-/MINERAPPS/
-  GSMINE94          ← GS Miner app (S16)
+/GSMINER/
+  GSMINE95          ← GS Miner app (S16)
   SYSFILES/
     PANEL           ← SHR dashboard chrome
     CONFIG          ← CONFIG page chrome
@@ -135,7 +135,7 @@ We filter out shares **we know will fail** rather than spam rejects. For a demo 
 | **POOL** / **PORT** | Primary Stratum host and port |
 | **BACKUP** / **BPORT** | Failover pool (optional) |
 
-Settings persist to `/MINERAPPS/SYSFILES/MINER.CONF`.
+Settings persist to `/GSMINER/SYSFILES/MINER.CONF`.
 
 **Default shipping config** uses a placeholder wallet and `SOLO.CKPOOL.ORG` — change it before LIVE mining, or treat it as an easter egg and point at your own pool.
 
@@ -159,8 +159,8 @@ See the header comment in `mock_pool.py` for the 80-byte block header layout the
 
 The app writes event-driven lines to rotating logs (never inside the hash loop):
 
-- `/MINERAPPS/SYSFILES/MINER.LOG` — current session  
-- `/MINERAPPS/SYSFILES/MINER.OLD` — previous ~8 KB block  
+- `/GSMINER/SYSFILES/MINER.LOG` — current session  
+- `/GSMINER/SYSFILES/MINER.OLD` — previous ~8 KB block  
 
 Examples: `CONNECT`, `JOB`, `STAT`, `ACCEPT`, `FAILOVER`, `DNS!`, `MINING`.
 

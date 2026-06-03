@@ -1320,15 +1320,15 @@ Bottom-left scope well:
 
 | Item | Status |
 |------|--------|
-| **Shipping build** | **`GSMINE94` / V0.94** — beta; multi-hour soaks stable |
+| **Shipping build** | **`GSMINE95` / V0.95** — beta gold master; multi-hour soaks stable; first live mining on real hardware |
 | **User README** | ✅ LIVE vs DEMO, submit filtering, hash lottery / turbo-GS note, CONFIG, mock pool, credits |
 | **`RELEASE_COMMS.md`** | ✅ FB post draft, GitHub release notes, repo layout checklist |
 | **In-app logo / branding** | ✅ gold GS / red MINER blitted at runtime into the SHR well + dynamic version stamp (`GSMINE94`, §16k) |
 | **Gold-master disk → GitHub Release** | ⬜ `make_master.sh` + attach `.2mg` (not dev `apps.2mg`) |
-| **LICENSE** | ⬜ pick MIT or similar |
+| **LICENSE** | ✅ MIT (`LICENSE`) + ISC note for vendored `65816-crypto/` |
 | **Source drop** | ⬜ few days after disk — `miner/`, patched `65816-crypto/`, build scripts, trimmed docs |
 | **M-accel (TWGS/ZipGS)** | ⬜ optional real-iron hashrate multiplier |
-| **Draw-path perf** | ⬜ optional; V0.94 already ~9–10 H/s on stock 2.8 MHz |
+| **Draw-path perf** | ⬜ optional; V0.95 already ~9–10 H/s on stock 2.8 MHz |
 
 **ckpool worker UI lag:** wallet dashboard may not show the worker immediately; in-app `SHA-256D` +
 `JOBS` ticking = connected. Same reported for Bitaxe/Nano II.
