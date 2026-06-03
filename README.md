@@ -308,7 +308,7 @@ Since the on-board miner is on track to find a block in roughly **860 trillion y
 3CfSNGtkdpGMyKWx57Vr93MdHyP2UQgKao
 ```
 
-Yes — that's the same wallet baked in as the app's default, so the dashboard you see is mining straight into the tip jar. No pressure: at current hashrate, donating one satoshi out-earns the miner by approximately *all of recorded time*. If this project made you smile or saved you a weekend of ORCA wrangling, a few sats are appreciated. If not, the GS will keep grinding away — see you in 860 trillion years. 🪙
+The app's default wallet *is* the donation wallet above — so the dashboard is mining straight into the tip jar. No pressure: at this hashrate, donating a single satoshi out-earns the miner by roughly **60,000× the age of the universe**. If this made you smile or saved you a weekend of ORCA wrangling, a few sats are appreciated. Otherwise the GS keeps grinding — see you in 860 trillion years. 🪙
 
 ---
 
